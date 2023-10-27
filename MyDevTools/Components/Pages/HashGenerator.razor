@@ -1,0 +1,104 @@
+﻿@using System.Security.Cryptography
+
+@page "/hashgenerator"
+
+<h3 class="text-center">Hash Generator</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form-group">
+                <label for="inputText">Input Text:</label>
+                <textarea id="inputText" class="form-control" @bind="inputText" @oninput="ClearHash"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="hashAlgorithm">Select Hash Algorithm:</label>
+                <select id="hashAlgorithm" class="form-control" @bind="selectedAlgorithm" @oninput="ClearHash">
+                    @foreach (var algorithmName in Enum.GetNames(typeof(HashAlgorithms)))
+                    {
+                        <option value="@algorithmName">@algorithmName</option>
+                    }
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-block" @onclick="GenerateHash">Generate Hash</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(hashResult))
+    {
+        <div class="row mt-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="alert alert-success" role="alert">
+                    <strong>Hash Result:</strong>
+                    <pre>@hashResult</pre>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private enum HashAlgorithms
+    {
+        // Omitted MD5 based on your criteria
+        SHA256,
+        SHA384,
+        SHA512
+    }
+
+    private string inputText = "Example input text";
+    private HashAlgorithms selectedAlgorithm = HashAlgorithms.SHA256;
+    private string hashResult = "";
+
+    protected override void OnInitialized()
+    {
+        GenerateHash();
+    }
+
+    private IEnumerable<string> GetAvailableHashAlgorithms()
+    {
+        return Enum.GetNames(typeof(HashAlgorithms));
+    }
+
+    private void GenerateHash()
+    {
+        try
+        {
+            HashAlgorithm hasher = null;
+            switch (selectedAlgorithm)
+            {
+                case HashAlgorithms.SHA256:
+                    hasher = SHA256.Create();
+                    break;
+                case HashAlgorithms.SHA384:
+                    hasher = SHA384.Create();
+                    break;
+                case HashAlgorithms.SHA512:
+                    hasher = SHA512.Create();
+                    break;
+            }
+
+            if (hasher != null)
+            {
+                using (hasher)
+                {
+                    byte[] data = System.Text.Encoding.UTF8.GetBytes(inputText);
+                    byte[] hashBytes = hasher.ComputeHash(data);
+                    hashResult = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            hashResult = "Error: " + ex.Message;
+        }
+    }
+
+
+    private void ClearHash()
+    {
+        hashResult = "";
+    }
+}
