@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>svelte-jsoneditor demo</title>
+    <style>
+        #jsoneditor {
+            width: 1000px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div id="jsoneditor"></div>
+
+    <script type="module">
+        import { JSONEditor } from '/js/JsonEditor.js'
+
+        let content = {
+            text: undefined,
+            json: {
+                example: 1
+            }
+        }
+
+        const editor = new JSONEditor({
+            target: document.getElementById('jsoneditor'),
+            props: {
+                content,
+                mode: 'text',
+                onChange: (updatedContent, previousContent, { contentErrors, patchResult }) => {
+                    // content is an object { json: JSONValue } | { text: string }
+                    console.log('onChange', { updatedContent, previousContent, contentErrors, patchResult })
+                    content = updatedContent
+                }
+            }
+        })
+
+        // use methods get, set, update, and onChange to get data in or out of the editor.
+        // Use updateProps to update properties.
+    </script>
+</body>
+</html>
