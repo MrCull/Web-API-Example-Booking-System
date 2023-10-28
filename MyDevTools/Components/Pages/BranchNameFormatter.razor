@@ -1,0 +1,75 @@
+﻿@page "/BranchNameFormatter"
+@inject Services.IClipboardService ClipboardService
+
+<h3 class="text-center">Git Branch Name Formatter</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form-group">
+                <label for="inputString">Input String:</label>
+                <textarea id="inputString" class="form-control" @bind="inputString"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" @onclick="FormatGitBranchName">Format Git Branch Name</button>
+            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(formattedString))
+    {
+        <div class="row mt-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="alert alert-success" role="alert">
+                    <strong>Formatted Branch Name:</strong>
+                    <textarea readonly class="form-control" rows="3">@formattedString</textarea>
+                    <div class="mt-2 text-success">@copyConfirmationMessage</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string inputString = "Feature 12345 : Example work item name";
+    private string formattedString = "";
+    private string copyConfirmationMessage = "";
+
+    protected override void OnInitialized()
+    {
+        FormatGitBranchName();
+    }
+
+    private void FormatGitBranchName()
+    {
+        try
+        {
+            // Remove only the first word immediately followed by a number
+            var regex = new System.Text.RegularExpressions.Regex(@"\b(\w+)(?=\s+\d)");
+            string stringWithoutIssueWord = regex.Replace(inputString, "", 1);
+
+            // Replace invalid characters with underscores and remove leading/trailing underscores
+            formattedString = System.Text.RegularExpressions.Regex.Replace(stringWithoutIssueWord, "[^a-zA-Z0-9]+", "_").Trim('_');
+        }
+        catch (Exception ex)
+        {
+            formattedString = "Error: " + ex.Message;
+        }
+    }
+
+    private async Task CopyToClipboard()
+    {
+        try
+        {
+            // Use the Clipboard API to copy the text to the clipboard
+            await ClipboardService.CopyToClipboardAsync(formattedString);
+
+            // Set the confirmation message
+            copyConfirmationMessage = "Text copied to clipboard!";
+        }
+        catch (Exception ex)
+        {
+            copyConfirmationMessage = "Error: " + ex.Message;
+        }
+    }
+}
