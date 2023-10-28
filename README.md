@@ -27,4 +27,4 @@ Feel free to submit pull requests.
 
 ## License
 
-See the [LICENSE.md](./LICENSE.md) file for details.
+See the [LICENSE.txt](./LICENSE.txt) file for details.
