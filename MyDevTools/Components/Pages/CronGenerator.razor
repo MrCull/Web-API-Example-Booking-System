@@ -1,0 +1,116 @@
+﻿@page "/CronGenerator"
+@inject Services.IClipboardService ClipboardService
+
+<h3 class="text-center">Cron Expression Generator</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="form-group">
+                <label for="minutes">Minutes:</label>
+                <select class="form-control" @bind="minutes">
+                    <option>*</option>
+                    @for (int i = 0; i < 60; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hours">Hours:</label>
+                <select class="form-control" @bind="hours">
+                    <option>*</option>
+                    @for (int i = 0; i < 24; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="days">Days:</label>
+                <select class="form-control" @bind="days">
+                    <option>*</option>
+                    @for (int i = 1; i <= 31; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="months">Months:</label>
+                <select class="form-control" @bind="months">
+                    <option>*</option>
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="weekdays">Weekdays:</label>
+                <select class="form-control" @bind="weekdays">
+                    <option>*</option>
+                    @for (int i = 0; i <= 7; i++)
+                    {
+                        <option>@i</option>
+                    }
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-block" @onclick="GenerateCronExpression">Generate Cron Expression</button>
+            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(cronExpression))
+    {
+        <div class="row mt-4">
+            <div class="col-md-10 offset-md-1">
+                <div class="alert alert-success" role="alert">
+                    <strong>Generated Cron Expression:</strong>
+                    <textarea readonly id="cronExpression" class="form-control" rows="3">@cronExpression</textarea>
+                    <div class="mt-2 text-success">@copyConfirmationMessage</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string minutes = "*";
+    private string hours = "*";
+    private string days = "*";
+    private string months = "*";
+    private string weekdays = "*";
+    private string cronExpression = "";
+    private string copyConfirmationMessage = "";
+
+    private void GenerateCronExpression()
+    {
+        try
+        {
+            // Generate the complete cron expression based on the settings
+            cronExpression = $"{minutes} {hours} {days} {months} {weekdays}";
+        }
+        catch (Exception ex)
+        {
+            cronExpression = "Error: " + ex.Message;
+        }
+    }
+
+    private async Task CopyToClipboard()
+    {
+        try
+        {
+            // Use the Clipboard API to copy the text to the clipboard
+            await ClipboardService.CopyToClipboardAsync(cronExpression);
+
+            // Set the confirmation message
+            copyConfirmationMessage = "Cron expression copied to clipboard!";
+        }
+        catch (Exception ex)
+        {
+            copyConfirmationMessage = "Error: " + ex.Message;
+        }
+    }
+}
