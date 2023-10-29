@@ -1,0 +1,70 @@
+﻿@page "/JwtDecoder"
+@using System.IdentityModel.Tokens.Jwt
+@using Microsoft.IdentityModel.Tokens
+@inject Services.IClipboardService ClipboardService
+
+<h3 class="text-center">JWT Decoder</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="form-group">
+                <label for="inputToken">Enter JWT (rest assured, your data stays on your device):</label>
+                <textarea id="inputToken" class="form-control" @bind="inputToken" rows="4"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" @onclick="DecodeJwt">Decode JWT</button>
+            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(decodedJson))
+    {
+        <div class="row mt-4">
+            <div class="col-md-10 offset-md-1">
+                <div class="alert alert-success" role="alert">
+                    <strong>Decoded JWT:</strong>
+                    <textarea readonly class="form-control" rows="8">@decodedJson</textarea>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string inputToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.S5CmpIhks5H_I8HWiRgEzhuHRCXLzguG6zGZtRjG5oA";
+    private string decodedJson = "";
+
+    protected override void OnInitialized()
+    {
+        DecodeJwt();
+    }
+
+    private void DecodeJwt()
+    {
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadJwtToken(inputToken);
+
+            decodedJson = jsonToken.ToString();
+        }
+        catch (Exception ex)
+        {
+            decodedJson = "Error: " + ex.Message;
+        }
+    }
+
+    private async Task CopyToClipboard()
+    {
+        try
+        {
+            // Use the Clipboard API to copy the text to the clipboard
+            await ClipboardService.CopyToClipboardAsync(decodedJson);
+        }
+        catch (Exception ex)
+        {
+            // Handle the error
+        }
+    }
+}
