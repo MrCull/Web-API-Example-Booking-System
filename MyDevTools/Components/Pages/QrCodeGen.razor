@@ -1,0 +1,43 @@
+﻿@page "/QrCodeGen"
+@using Net.Codecrete.QrCodeGenerator
+@using System.Security.Cryptography
+
+<h3 class="text-center">QR Code Generator</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form-group">
+                <label for="QRCodeText">QR Code Text:</label>
+                <input id="QRCodeText" type="text" @bind="QRCodeText" placeholder="Enter your text" class="form-control mb-4" />
+            </div>
+            <button class="btn btn-primary btn-block" @onclick="GenerateQRCode">Generate QR Code</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(QRCodeSvg))
+    {
+        <div class="row mt-4">
+            <div class="col-md-4 offset-md-2">
+                <div class="alert alert-success" role="alert">
+                    <strong>QR Code:</strong>
+                    <div>@((MarkupString)QRCodeSvg)</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    public string QRCodeText { get; set; }
+    public string QRCodeSvg { get; set; }
+
+    public void GenerateQRCode()
+    {
+        if (!string.IsNullOrEmpty(QRCodeText))
+        {
+            var qrCode = QrCode.EncodeText(QRCodeText, QrCode.Ecc.Low);
+            QRCodeSvg = qrCode.ToSvgString(1);
+        }
+    }
+}
