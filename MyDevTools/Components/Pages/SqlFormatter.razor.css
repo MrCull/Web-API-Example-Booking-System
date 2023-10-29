@@ -1,0 +1,6 @@
+﻿.auto-expand {
+    min-height: 50px;
+    max-height: 200px; /* Max height before scroll */
+    overflow-y: auto; /* Add scroll if text exceeds max-height */
+    resize: none; /* Disable manual resize */
+}

@@ -1,0 +1,73 @@
+﻿@page "/SqlFormatter"
+@using System.Text
+@using BasicSQLFormatter
+@inject Services.IClipboardService ClipboardService
+
+<h3 class="text-center">Database Query Formatter</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="form-group">
+                <label for="inputQuery">Input SQL Query:</label>
+                <textarea id="inputQuery" class="form-control auto-expand" @bind="inputQuery" rows="6"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" @onclick="FormatSQLQuery">Format SQL Query</button>
+            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(formattedQuery))
+    {
+        <div class="row mt-4">
+            <div class="col-md-10 offset-md-1">
+                <div class="alert alert-success" role="alert">
+                    <strong>Formatted SQL Query:</strong>
+                    <textarea readonly id="formattedQuery" class="form-control auto-expand" rows="15">@formattedQuery</textarea>
+                    <div class="mt-2 text-success">@copyConfirmationMessage</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string inputQuery = "SELECT name, age, department FROM employees INNER JOIN departments ON employees.department_id = departments.id WHERE age > 21 AND (department = 'Engineering' OR department = 'HR') GROUP BY department ORDER BY age DESC;";
+    private string formattedQuery = "";
+    private string copyConfirmationMessage = "";
+
+    protected override void OnInitialized()
+    {
+        FormatSQLQuery();
+    }
+
+    private void FormatSQLQuery()
+    {
+        try
+        {
+            var formatter = new SQLFormatter(inputQuery);
+            formattedQuery = formatter.Format();
+        }
+        catch (Exception ex)
+        {
+            formattedQuery = "Error: " + ex.Message;
+        }
+    }
+
+    private async Task CopyToClipboard()
+    {
+        try
+        {
+            // Use the Clipboard API to copy the text to the clipboard
+            await ClipboardService.CopyToClipboardAsync(formattedQuery);
+
+            // Set the confirmation message
+            copyConfirmationMessage = "Query copied to clipboard!";
+        }
+        catch (Exception ex)
+        {
+            copyConfirmationMessage = "Error: " + ex.Message;
+        }
+    }
+}
