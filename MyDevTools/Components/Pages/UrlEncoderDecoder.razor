@@ -1,0 +1,78 @@
+﻿@page "/URLEncoderDecoder"
+@inject Services.IClipboardService ClipboardService
+
+<h3 class="text-center">URL Encoder/Decoder</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form-group">
+                <label for="inputUrl">Input URL:</label>
+                <textarea id="inputUrl" class="form-control" @bind="inputUrl"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" @onclick="EncodeUrl">Encode URL</button>
+            <button class="btn btn-warning btn-block" @onclick="DecodeUrl">Decode URL</button>
+            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(processedUrl))
+    {
+        <div class="row mt-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="alert alert-success" role="alert">
+                    <strong>Processed URL:</strong>
+                    <textarea readonly class="form-control" rows="3">@processedUrl</textarea>
+                    <div class="mt-2 text-success">@copyConfirmationMessage</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string inputUrl = "";
+    private string processedUrl = "";
+    private string copyConfirmationMessage = "";
+
+    private void EncodeUrl()
+    {
+        try
+        {
+            processedUrl = System.Web.HttpUtility.UrlEncode(inputUrl);
+        }
+        catch (Exception ex)
+        {
+            processedUrl = "Error: " + ex.Message;
+        }
+    }
+
+    private void DecodeUrl()
+    {
+        try
+        {
+            processedUrl = System.Web.HttpUtility.UrlDecode(inputUrl);
+        }
+        catch (Exception ex)
+        {
+            processedUrl = "Error: " + ex.Message;
+        }
+    }
+
+    private async Task CopyToClipboard()
+    {
+        try
+        {
+            // Use the Clipboard API to copy the text to the clipboard
+            await ClipboardService.CopyToClipboardAsync(processedUrl);
+
+            // Set the confirmation message
+            copyConfirmationMessage = "Text copied to clipboard!";
+        }
+        catch (Exception ex)
+        {
+            copyConfirmationMessage = "Error: " + ex.Message;
+        }
+    }
+}
