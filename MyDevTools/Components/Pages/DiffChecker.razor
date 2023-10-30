@@ -1,0 +1,158 @@
+﻿@page "/DiffChecker"
+@using DiffPlex;
+@using DiffPlex.DiffBuilder
+@using DiffPlex.DiffBuilder.Model
+@using DiffPlex.Model;
+@inject Services.IClipboardService ClipboardService
+
+<h3 class="text-center">Diff Checker</h3>
+<p>Rest assured, your data stays on your device</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <textarea class="form-control" @bind="text1" placeholder="Enter diff from text" rows="7"></textarea>
+        </div>
+        <div class="col-md-2 text-center">
+            <button class="btn btn-primary" @onclick="CompareTexts">Compare</button>
+        </div>
+        <div class="col-md-5">
+            <textarea class="form-control" @bind="text2" placeholder="Enter diff to text" rows="7"></textarea>
+        </div>
+    </div>
+
+    @if (diffModel != null)
+    {
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <pre class="line-numbers">
+                    <code>
+                            
+                        @{ lineCount = 0;}
+                        @foreach (var line in diffModel.OldText.Lines)
+                        {
+
+
+                    <span class="@GetCssClass(line.Type, true)">
+                                @if (line.Type == ChangeType.Imaginary)
+                                {
+                        <span class="line-number-man">&nbsp;&nbsp;</span>
+                                }
+                                else
+                                {
+                                    lineCount++;
+                        <span class="line-number-man">@lineCount&nbsp;&nbsp;</span>
+
+                                    @*                      @diffModel.OldText.Lines[i].Text *@
+                                    @if (line.SubPieces == null || !line.SubPieces.Any())
+                                    {
+                            <span class="@GetCssClassForText(line)">
+                                            @line.Text
+                                                            </span>
+                                    }
+                                    else
+                                    {
+                                        @foreach (var subPiece in line.SubPieces)
+                                        {
+                                <span class="@GetCssClassForText(subPiece)">
+                                                @subPiece.Text
+                                                                        </span>
+                                        }
+                                    }
+                                }
+                                            </span>
+                        }
+                    </code>
+                </pre>
+            </div>
+
+            <div class="col-md-6">
+                <pre class="line-numbers">
+                    <code>
+                        @{ lineCount = 0;}
+                        @foreach (var line in diffModel.NewText.Lines)
+                        {
+                            
+
+                        <span class="@GetCssClass(line.Type, false)">
+                            @if (line.Type == ChangeType.Imaginary)
+                                {
+                        <span class="line-number-man">&nbsp;&nbsp;</span>
+                                }
+                                else
+                                {
+                                    lineCount++;
+                        <span class="line-number-man">@lineCount&nbsp;&nbsp;</span>
+
+                                @*                      @diffModel.OldText.Lines[i].Text *@
+                                @if (line.SubPieces == null || !line.SubPieces.Any())
+                                {
+                        <span class="@GetCssClassForText(line)">
+                                        @line.Text
+                                            </span>
+                                }
+                                else
+                                {
+                                    @foreach (var subPiece in line.SubPieces)
+                                    {
+                            <span class="@GetCssClassForText(subPiece)">
+                                            @subPiece.Text
+                                                    </span>
+                                    }
+                                }
+                                }
+                                    </span>
+                        }
+                    </code></pre>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    private int lineCount = 0;
+    private string text1 = "";
+    //    text1 = $"Example unchanged.{Environment.NewLine}Example changed.{Environment.NewLine}Example gone.{Environment.NewLine}";
+    private string text2 = "";
+    //text2 = $"Example unchanged.{Environment.NewLine}Example CHANGED.{Environment.NewLine}{Environment.NewLine}Example new.";
+    private SideBySideDiffModel diffModel;
+
+    protected override void OnInitialized()
+    {
+        CompareTexts();
+    }
+
+    private void CompareTexts()
+    {
+        var diffBuilder = new SideBySideDiffBuilder(DiffPlex.Differ.Instance);
+        diffModel = diffBuilder.BuildDiffModel(text1, text2);
+    }
+
+    private string GetCssClass(ChangeType changeType, bool isOldText)
+    {
+        if (changeType == ChangeType.Imaginary)
+        {
+            return "row-imaginary";
+        }
+
+        string backgroundClass = isOldText ?
+            (changeType == ChangeType.Deleted ? "row-missing" : (changeType == ChangeType.Modified ? "row-changed" : "")) :
+            (changeType == ChangeType.Inserted ? "row-new" : (changeType == ChangeType.Modified ? "row-changed" : ""));
+
+        return backgroundClass;
+    }
+
+    private string GetCssClassForText(DiffPiece piece)
+    {
+        string textClass = piece.Type switch
+        {
+            ChangeType.Inserted => "row-changed-added-text",
+            ChangeType.Deleted => "row-changed-removed-text",
+            ChangeType.Modified => "row-changed-changed-text",
+            _ => ""
+        };
+
+        return $"{textClass}";
+    }
+}
