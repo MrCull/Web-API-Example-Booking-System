@@ -1,4 +1,5 @@
 ﻿@page "/containerIds"
+@inherits Base.BasePage
 @inject Services.IClipboardService ClipboardService
 @using System.Text
 
@@ -49,8 +50,10 @@
     "AZLU", "EISU", "BSIU", "NYKU", "YMLU"};
 
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Generate container IDs.", "Container IDs, Dev Tools, Identifier");
+
         GenerateCodes();
     }
 

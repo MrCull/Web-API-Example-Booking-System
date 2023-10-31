@@ -1,4 +1,5 @@
 ﻿@page "/DiffChecker"
+@inherits Base.BasePage
 @using DiffPlex.DiffBuilder
 @using DiffPlex.DiffBuilder.Model
 @using MyDevTools.Components.Pages.Components
@@ -39,8 +40,10 @@
     private string text2 = "";
     private SideBySideDiffModel diffModel;
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Compare code and text to find differences.", "Diff Checker, Dev Tools, Code Comparison");
+
         text1 = $"Example unchanged.{Environment.NewLine}Example changed.{Environment.NewLine}Example gone.{Environment.NewLine}";
         text2 = $"Example unchanged.{Environment.NewLine}Example CHANGED.{Environment.NewLine}{Environment.NewLine}Example new.";
         CompareTexts();

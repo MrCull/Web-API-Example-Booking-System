@@ -27,4 +27,13 @@
     <Folder Include="wwwroot\sample-data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\js\JsonEditor.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\Seo.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

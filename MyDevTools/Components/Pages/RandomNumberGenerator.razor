@@ -1,4 +1,5 @@
 ﻿@page "/randomnumbergenerator"
+@inherits Base.BasePage
 @inject Services.IClipboardService ClipboardService
 
 <h3 class="text-center">Random Numbers</h3>
@@ -42,8 +43,10 @@
     private string generatedNumbersText = "";
     private string copyConfirmationMessage = "";
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Generate random numbers for various purposes.", "Random Numbers, Dev Tools, Math Tools");
+
         base.OnInitialized();
 
         // Generate random numbers with default values when the page is first visited

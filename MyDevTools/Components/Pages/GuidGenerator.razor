@@ -1,4 +1,5 @@
 ﻿@page "/GuidGenerator"
+@inherits Base.BasePage
 @inject Services.IClipboardService ClipboardService
 
 <h3 class="text-center">GUID Generator</h3>
@@ -50,8 +51,10 @@
     private int quantity = 1;
     private List<string> guidResults = new();
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Generate GUIDs with ease.", "GUID Generator, Dev Tools, Identifier");
+
         GenerateGUID();
     }
 

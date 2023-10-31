@@ -1,4 +1,5 @@
 ﻿@page "/SqlFormatter"
+@inherits Base.BasePage
 @using System.Text
 @using BasicSQLFormatter
 @inject Services.IClipboardService ClipboardService
@@ -37,8 +38,10 @@
     private string formattedQuery = "";
     private string copyConfirmationMessage = "";
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Make your SQL queries more readable.", "SQL Formatter, Dev Tools, Database Tools");
+
         FormatSQLQuery();
     }
 

@@ -1,4 +1,16 @@
 ﻿@page "/jsonformatter"
+@inherits Base.BasePage
+@inject IJSRuntime JSRuntime
+
 
 <label for="inputQuery">Input JSON (rest assured, your data stays on your device):</label>
 <iframe id="myiframe" src="iframepages/jsonformatter.html" height="650px" width="1050px" scrolling="no" />
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateMetaTagsAsync("Easily format and validate your JSON code.", "JSON Formatter, Dev Tools, Code Formatter");
+    }
+
+}

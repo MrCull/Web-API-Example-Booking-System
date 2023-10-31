@@ -1,4 +1,5 @@
 ﻿@page "/ColorPickerConverter"
+@inherits Base.BasePage
 
 <h3 class="text-center">Color Picker/Converter</h3>
 
@@ -41,8 +42,10 @@
     private string selectedColor = "#FFFFFF";  // Default to white
     private string convertedColor = "RGB(255, 255, 255)";  // Default to white
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Convert and choose colours for your projects.", "Colour Converter, Dev Tools, Design");
+
         // Initialize the timer to call ConvertColors every 0.25 seconds
         timer = new Timer(_ => ConvertColors(), null, 0, 250);
         ConvertColors();

@@ -1,5 +1,6 @@
 ﻿@page "/CronGenerator"
 @inject Services.IClipboardService ClipboardService
+@inherits Base.BasePage
 
 <h3 class="text-center">Cron Expression Generator</h3>
 
@@ -84,6 +85,13 @@
     private string weekdays = "*";
     private string cronExpression = "";
     private string copyConfirmationMessage = "";
+
+    protected override async void OnInitialized()
+    {
+        await UpdateMetaTagsAsync("Generate cron expressions with ease.", "Cron Expression Generator, Dev Tools, Web Tools");
+
+        base.OnInitialized();
+    }
 
     private void GenerateCronExpression()
     {

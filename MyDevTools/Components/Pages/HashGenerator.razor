@@ -1,6 +1,7 @@
-﻿@using System.Security.Cryptography
+﻿@page "/hashgenerator"
+@inherits Base.BasePage
+@using System.Security.Cryptography
 
-@page "/hashgenerator"
 
 <h3 class="text-center">Hash Generator</h3>
 
@@ -52,8 +53,10 @@
     private HashAlgorithms selectedAlgorithm = HashAlgorithms.SHA256;
     private string hashResult = "";
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Generate various types of hashes.", "Hash Generator, Dev Tools, Security");
+
         GenerateHash();
     }
 

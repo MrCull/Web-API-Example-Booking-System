@@ -2,6 +2,7 @@
 @using System.IdentityModel.Tokens.Jwt
 @using Microsoft.IdentityModel.Tokens
 @inject Services.IClipboardService ClipboardService
+@inherits Base.BasePage
 
 <h3 class="text-center">JWT Decoder</h3>
 
@@ -35,8 +36,10 @@
     private string inputToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.S5CmpIhks5H_I8HWiRgEzhuHRCXLzguG6zGZtRjG5oA";
     private string decodedJson = "";
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        await UpdateMetaTagsAsync("Decode JWTs.", "JWT Decoder, Dev Tools, Web Tools");
+
         DecodeJwt();
     }
 

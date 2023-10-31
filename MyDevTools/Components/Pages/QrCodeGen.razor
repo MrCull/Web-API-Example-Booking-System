@@ -1,4 +1,5 @@
 ﻿@page "/QrCodeGen"
+@inherits Base.BasePage
 @using Net.Codecrete.QrCodeGenerator
 @using System.Security.Cryptography
 
@@ -31,6 +32,13 @@
 @code {
     public string QRCodeText { get; set; }
     public string QRCodeSvg { get; set; }
+
+    protected override void OnInitialized()
+    {
+        UpdateMetaTagsAsync("Generate QR codes with ease.", "QR Code Generator, Dev Tools, Web Tools");
+
+        base.OnInitialized();
+    }
 
     public void GenerateQRCode()
     {
