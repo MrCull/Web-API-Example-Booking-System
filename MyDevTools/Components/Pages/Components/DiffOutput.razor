@@ -1,0 +1,61 @@
+﻿@using DiffPlex.DiffBuilder.Model
+@code {
+    [Parameter] public DiffPaneModel PaneModel { get; set; }
+}
+
+<pre class="line-numbers">
+<code>
+        @{ 
+            int lineCount = 0;
+            foreach (var line in PaneModel.Lines)
+            {
+        <span class="@($"{GetCssForRow(line.Type)} block-span")">
+                    @if (line.Type == ChangeType.Imaginary)
+                    {
+            <span class="line-number-man">&nbsp;&nbsp;</span>
+                    }
+                    else
+                    {
+                        lineCount++;
+            <span class="line-number-man">@lineCount&nbsp;&nbsp;</span>
+                        @if (line.SubPieces == null || !line.SubPieces.Any())
+                        {
+                <span class="@GetCssForRowAndText(line.Type)">@line.Text</span>
+                        }
+                        else
+                        {
+                            foreach (var subPiece in line.SubPieces)
+                            {
+                    <span class="@GetCssForRowAndText(subPiece.Type)">@subPiece.Text</span>
+                            }
+                        }
+                    }
+                        </span>
+            }
+        }
+    </code>
+</pre>
+
+
+@code {
+    private string GetCssForRow(ChangeType changeType)
+    {
+        return changeType switch
+        {
+            ChangeType.Imaginary => "row-imaginary",
+            ChangeType.Deleted => "row-missing",
+            ChangeType.Modified => "row-changed",
+            ChangeType.Inserted => "row-new",
+            _ => ""
+        };
+    }
+
+    private string GetCssForRowAndText(ChangeType changeType)
+      => changeType switch
+        {
+            ChangeType.Inserted => "row-changed-added-text",
+            ChangeType.Deleted => "row-changed-removed-text",
+            ChangeType.Modified => "row-changed-changed-text",
+            _ => ""
+        };
+}

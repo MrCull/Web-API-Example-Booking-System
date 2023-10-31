@@ -1,11 +1,11 @@
-﻿/* General styles for line numbers and code */
+﻿/* General Styles */
 .line-numbers {
     counter-reset: line-number;
     font-family: 'Courier New', monospace;
     background-color: #f4f4f4;
     border: 1px solid #ccc;
     padding: 10px;
-    line-height: 1; /* Reduced line-height for closer lines */
+    line-height: 1;
     margin: 0;
 }
 
@@ -15,15 +15,12 @@
         padding: 0;
     }
 
-        /* Styling line numbers */
         .line-numbers code > span:before {
-/*            counter-increment: line-number;
-            content: counter(line-number);*/
             display: inline-block;
             width: 30px;
             margin-right: 10px;
             text-align: right;
-            color: lightgrey; /* Lightish grey for row numbers */
+            color: lightgrey;
             font-weight: bold;
         }
 
@@ -31,60 +28,41 @@
     color: lightgrey;
 }
 
-/* Text color styles for different types of changes */
-.text-unchanged {
-    color: black;
-}
-
-.text-success {
-    color: black;
-}
-
-.text-danger {
-    color: white;
-}
-
-.text-warning {
-    color: black;
-}
-
-
-/* Background color styles for different types of rows */
+/* Background and Text Colors */
 .row-changed {
     background-color: lightgoldenrodyellow;
     color: black;
 }
-/* Yellow background and black text for rows with any changes */
+
 .row-missing {
     background-color: lightcoral;
     color: white;
 }
-/* Red background and black text for missing rows */
+
 .row-new {
     background-color: lightgreen;
     color: black;
 }
-/* Green background and black text for new rows */
 
 .row-imaginary {
     background-color: lightgray;
     color: black;
 }
 
-/* Special case for text-warning (modified characters) over row-changed (yellow background) */
-.row-changed .text-warning {
-    color: darkorange;
-}
-
+/* Special Text Styles */
+.row-changed .text-warning,
 .row-changed-changed-text {
     color: darkorange;
 }
 
 .row-changed-added-text {
-    color: darkgreen
+    color: darkgreen;
 }
 
 .row-changed-removed-text {
     color: darkred;
 }
 
+.block-span {
+    display: block;
+}
