@@ -64,7 +64,6 @@
     {
         try
         {
-            // Use the Clipboard API to copy the text to the clipboard
             await ClipboardService.CopyToClipboardAsync(formattedString);
             copyConfirmationMessage = "Text copied to clipboard!";
         }

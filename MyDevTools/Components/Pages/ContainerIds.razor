@@ -113,10 +113,7 @@
     {
         try
         {
-            // Use the Clipboard API to copy the text to the clipboard
             await ClipboardService.CopyToClipboardAsync(generatedCodes);
-
-            // Set the confirmation message
             copyConfirmationMessage = "Text copied to clipboard!";
         }
         catch (Exception ex)

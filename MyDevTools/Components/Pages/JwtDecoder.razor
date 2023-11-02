@@ -62,12 +62,11 @@
     {
         try
         {
-            // Use the Clipboard API to copy the text to the clipboard
             await ClipboardService.CopyToClipboardAsync(decodedJson);
         }
         catch (Exception ex)
         {
-            // Handle the error
+            Console.WriteLine(ex.Message);
         }
     }
 }
