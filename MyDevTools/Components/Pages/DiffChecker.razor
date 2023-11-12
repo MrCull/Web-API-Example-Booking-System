@@ -40,7 +40,7 @@
     private string text2 = "";
     private SideBySideDiffModel diffModel;
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Compare code and text to find differences.", "Diff Checker, Dev Tools, Code Comparison");
 

@@ -39,10 +39,10 @@
     private string processedUrl = "";
     private string copyConfirmationMessage = "";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-        UpdateMetaTagsAsync("Encode or decode URLs.", "URL Encoder, URL Decoder, Dev Tools, Web Tools");
+        await UpdateMetaTagsAsync("Encode or decode URLs.", "URL Encoder, URL Decoder, Dev Tools, Web Tools");
 
         inputUrl = NavigationManager.Uri;
 

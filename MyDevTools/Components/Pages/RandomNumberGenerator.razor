@@ -43,7 +43,7 @@
     private string generatedNumbersText = "";
     private string copyConfirmationMessage = "";
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Generate random numbers for various purposes.", "Random Numbers, Dev Tools, Math Tools");
 

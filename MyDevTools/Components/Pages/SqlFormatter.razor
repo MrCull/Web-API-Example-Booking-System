@@ -38,7 +38,7 @@
     private string formattedQuery = "";
     private string copyConfirmationMessage = "";
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Make your SQL queries more readable.", "SQL Formatter, Dev Tools, Database Tools");
 

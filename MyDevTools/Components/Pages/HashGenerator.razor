@@ -52,7 +52,7 @@
     private HashAlgorithms selectedAlgorithm = HashAlgorithms.SHA256;
     private string hashResult = "";
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Generate various types of hashes.", "Hash Generator, Dev Tools, Security");
 

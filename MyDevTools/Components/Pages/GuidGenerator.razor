@@ -51,7 +51,7 @@
     private int quantity = 1;
     private List<string> guidResults = new();
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Generate GUIDs with ease.", "GUID Generator, Dev Tools, Identifier");
 

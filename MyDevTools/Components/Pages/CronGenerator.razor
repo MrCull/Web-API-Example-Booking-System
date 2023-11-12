@@ -86,11 +86,12 @@
     private string cronExpression = "";
     private string copyConfirmationMessage = "";
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Generate cron expressions with ease.", "Cron Expression Generator, Dev Tools, Web Tools");
 
         base.OnInitialized();
+        GenerateCronExpression();
     }
 
     private void GenerateCronExpression()

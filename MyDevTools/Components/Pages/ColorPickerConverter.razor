@@ -42,7 +42,7 @@
     private string selectedColor = "#FFFFFF";  // Default to white
     private string convertedColor = "RGB(255, 255, 255)";  // Default to white
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await UpdateMetaTagsAsync("Convert and choose colours for your projects.", "Colour Converter, Dev Tools, Design");
 

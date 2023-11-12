@@ -2,6 +2,7 @@
 @inherits Base.BasePage
 @using Net.Codecrete.QrCodeGenerator
 @using System.Security.Cryptography
+@inject NavigationManager NavigationManager
 
 <h3 class="text-center">QR Code Generator</h3>
 
@@ -33,11 +34,13 @@
     public string QRCodeText { get; set; }
     public string QRCodeSvg { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        UpdateMetaTagsAsync("Generate QR codes with ease.", "QR Code Generator, Dev Tools, Web Tools");
-
         base.OnInitialized();
+        await UpdateMetaTagsAsync("Generate QR codes with ease.", "QR Code Generator, Dev Tools, Web Tools");
+
+        QRCodeText = NavigationManager.Uri; // Set the QRCodeText to the current URL
+        GenerateQRCode(); // Automatically generate the QR Code
     }
 
     public void GenerateQRCode()
