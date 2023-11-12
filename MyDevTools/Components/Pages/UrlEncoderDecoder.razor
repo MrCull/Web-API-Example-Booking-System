@@ -1,6 +1,8 @@
 ﻿@page "/URLEncoderDecoder"
 @inherits Base.BasePage
 @inject Services.IClipboardService ClipboardService
+@inject NavigationManager NavigationManager
+
 
 <h3 class="text-center">URL Encoder/Decoder</h3>
 
@@ -39,10 +41,16 @@
 
     protected override void OnInitialized()
     {
+        base.OnInitialized();
         UpdateMetaTagsAsync("Encode or decode URLs.", "URL Encoder, URL Decoder, Dev Tools, Web Tools");
 
-        base.OnInitialized();
+        inputUrl = NavigationManager.Uri;
+
+        // Display the current encoded URL immediately
+        processedUrl = inputUrl;
+        EncodeUrl();
     }
+
 
     private void EncodeUrl()
     {
