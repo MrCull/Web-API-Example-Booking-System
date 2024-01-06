@@ -1,6 +1,6 @@
 using Api;
 using Api.Services;
-using CinemaBooking.Model;
+using Domain.Aggregates.TheaterChainAggregate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;

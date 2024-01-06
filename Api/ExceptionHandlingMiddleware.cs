@@ -1,4 +1,5 @@
-﻿using CinemaBooking.Model;
+﻿
+using Domain.Aggregates.Exceptions;
 
 namespace Api;
 

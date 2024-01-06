@@ -1,5 +1,5 @@
 ﻿using Api.Dtos;
-using CinemaBooking.Model;
+using Domain.Aggregates.TheaterChainAggregate;
 
 namespace Api.Services;
 
