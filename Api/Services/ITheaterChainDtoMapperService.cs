@@ -6,5 +6,5 @@ namespace Api.Services;
 public interface ITheaterChainDtoMapperService
 {
     MovieDto MapMovieToMovideDto(Movie movie);
-    IEnumerable<MovieDto> MapMovieToMovideDto(List<Movie> movies);
+    IEnumerable<MovieDto> MapMoviesToMoviesDto(List<Movie> movies);
 }

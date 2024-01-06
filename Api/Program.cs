@@ -1,4 +1,5 @@
 using Api;
+using Api.Dtos;
 using Api.Services;
 using Domain.Aggregates.TheaterChainAggregate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -90,13 +91,16 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi();
 
 TheaterChain _theaterChain = new(1, "Chain A", "Description A", []);
-_theaterChain.AddMovie("Movie A", "Description A", "Genre A", TimeSpan.FromMinutes(120), DateTime.UtcNow);
+_theaterChain.AddMovie("Movie A", "Description A", "Genre A", 120, DateTime.UtcNow);
 
-app.MapPost("/api/v1/theater-chains/{chainId}/movies", (int chainId, Movie movieToAdd) =>
+app.MapPost("/api/v1/theater-chains/{chainId}/movies", (ITheaterChainDtoMapperService mapperService,
+    int chainId, Movie movieToAdd) =>
 {
-    Movie movieAdded = _theaterChain.AddMovie(movieToAdd.Title, movieToAdd.Description, movieToAdd.Genre, movieToAdd.Duration, movieToAdd.ReleaseDateUtc);
+    Movie movieAdded = _theaterChain.AddMovie(movieToAdd.Title, movieToAdd.Description, movieToAdd.Genre, movieToAdd.DurationMins, movieToAdd.ReleaseDateUtc);
 
-    return Results.Created($"/api/v1/theater-chains/{chainId}/movies/{movieAdded.Id}", movieAdded);
+    MovieDto movieDto = mapperService.MapMovieToMovideDto(movieAdded);
+
+    return Results.Created($"/api/v1/theater-chains/{chainId}/movies/{movieAdded.Id}", movieDto);
 })
     .WithOpenApi();
 
@@ -130,7 +134,7 @@ app.MapGet("/api/v1/theater-chains/{chainId}/movies", (ITheaterChainDtoMapperSer
 {
     List<Movie> movies = _theaterChain.GetMovies();
 
-    return mapperService.MapMovieToMovideDto(movies);
+    return mapperService.MapMoviesToMoviesDto(movies);
 });
 
 //app.MapDelete("/api/v1/theater-chains/{chainId}/movies/{id}", (MovieService movieService, int chainId, int id) =>

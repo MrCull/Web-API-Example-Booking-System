@@ -74,12 +74,12 @@ public class Theater
 
         if (price < 0) throw new TheaterException("Price cannot be less than 0");
 
-        if (Showtimes.Exists(_ => showDateTimeUtc >= _.ShowDateTimeUtc && showDateTimeUtc <= _.ShowDateTimeUtc + _.Movie.Duration))
+        if (Showtimes.Exists(_ => showDateTimeUtc >= _.ShowDateTimeUtc && showDateTimeUtc <= _.ShowDateTimeUtc.AddMinutes(_.Movie.DurationMins)))
         {
             throw new TheaterException("Screen already has a showtime scheduled for this date and time");
         }
 
-        if (Showtimes.Exists(_ => showDateTimeUtc >= _.ShowDateTimeUtc && showDateTimeUtc <= _.ShowDateTimeUtc.AddMinutes(50) + _.Movie.Duration))
+        if (Showtimes.Exists(_ => showDateTimeUtc >= _.ShowDateTimeUtc && showDateTimeUtc <= _.ShowDateTimeUtc.AddMinutes(_.Movie.DurationMins).AddMinutes(50)))
         {
             throw new TheaterException("Screen needs at least 50mins before next Showtime");
         }

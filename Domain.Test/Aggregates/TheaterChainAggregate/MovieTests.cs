@@ -12,17 +12,17 @@ internal class MovieTests
     [SetUp]
     public void Setup()
     {
-        _movie = new Movie(1, "Movie Title", "Description", TimeSpan.FromMinutes(120), "Genre", new DateTime(2022, 1, 1));
+        _movie = new Movie(1, "Movie Title", "Description", 120, "Genre", new DateTime(2022, 1, 1));
     }
 
     [Test]
     public void UpdateInformation_NewInfo_InformationIsUpdated()
     {
         // Arrange
-        Movie updatedMovie = new(1, "Updated Movie Title", "Updated Description", TimeSpan.FromMinutes(1), "Updated Genre", new DateTime(1966, 1, 1));
+        Movie updatedMovie = new(1, "Updated Movie Title", "Updated Description", 1, "Updated Genre", new DateTime(1966, 1, 1));
 
         // Act
-        _movie.UpdateInformation(updatedMovie.Title, updatedMovie.Description, updatedMovie.Genre, updatedMovie.Duration, updatedMovie.ReleaseDateUtc);
+        _movie.UpdateInformation(updatedMovie.Title, updatedMovie.Description, updatedMovie.Genre, updatedMovie.DurationMins, updatedMovie.ReleaseDateUtc);
 
         // Assert
         _movie.Should().BeEquivalentTo(updatedMovie);

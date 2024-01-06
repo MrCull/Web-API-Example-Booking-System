@@ -86,19 +86,19 @@ public class TheaterChain
         Movies.Add(movie);
     }
 
-    public Movie AddMovie(string title, string description, string genre, TimeSpan duration, DateTime releaseDateUtc)
+    public Movie AddMovie(string title, string description, string genre, int durationMins, DateTime releaseDateUtc)
     {
-        Movie movie = new(0, title, description, duration, genre, releaseDateUtc);
+        Movie movie = new(0, title, description, durationMins, genre, releaseDateUtc);
         Movies.Add(movie);
         return movie;
     }
 
-    public void UpdateMovie(int id, string title, string description, string genre, TimeSpan duration, DateTime releaseDateUtc)
+    public void UpdateMovie(int id, string title, string description, string genre, int durationMins, DateTime releaseDateUtc)
     {
         Movie? movie = Movies.Find(m => m.Id == id);
         if (movie != null)
         {
-            movie.UpdateInformation(title, description, genre, duration, releaseDateUtc);
+            movie.UpdateInformation(title, description, genre, durationMins, releaseDateUtc);
         }
         else
         {

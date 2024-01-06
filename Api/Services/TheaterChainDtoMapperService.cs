@@ -14,10 +14,10 @@ namespace Api.Services
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            return new MovieDto(movie.Id, movie.Title, movie.Description, movie.Duration, movie.Genre, movie.ReleaseDateUtc, movieStatus);
+            return new MovieDto(movie.Id, movie.Title, movie.Description, movie.DurationMins, movie.Genre, movie.ReleaseDateUtc, movieStatus);
         }
 
-        public IEnumerable<MovieDto> MapMovieToMovideDto(List<Movie> movies)
+        public IEnumerable<MovieDto> MapMoviesToMoviesDto(List<Movie> movies)
             => movies.Select(MapMovieToMovideDto);
     }
 }

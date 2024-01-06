@@ -15,7 +15,7 @@ internal class TheaterTests
     [SetUp]
     public void Setup()
     {
-        _movie = new Movie(1, "Movie A", "Description A", TimeSpan.FromMinutes(136), "Action", new DateTime(2022, 1, 1));
+        _movie = new Movie(1, "Movie A", "Description A", 136, "Action", new DateTime(2022, 1, 1));
         List<Movie> movies = [_movie];
 
         _theater = new Theater(1, "Theater A", "Location A", movies);
@@ -328,7 +328,7 @@ internal class TheaterTests
     public void AddShowtime_ToScreenWithExistingShowtimeOverlappingRuntime_ThrowsException()
     {
         // Arrange
-        _movie.UpdateInformation(_movie.Title, _movie.Description, _movie.Genre, TimeSpan.FromMinutes(120), _movie.ReleaseDateUtc);
+        _movie.UpdateInformation(_movie.Title, _movie.Description, _movie.Genre, 120, _movie.ReleaseDateUtc);
         _theater.AddScreen("1");
         Screen screen = _theater.GetScreenByName("1");
         DateTime futureDateTime = DateTime.Now.AddDays(1);
@@ -347,16 +347,16 @@ internal class TheaterTests
     public void AddShowtime_ToScreenWithExistingShowtimeLessThan50MinutesBetween_ThrowsException()
     {
         // Arrange
-        _movie.UpdateInformation(_movie.Title, _movie.Description, _movie.Genre, TimeSpan.FromMinutes(120), _movie.ReleaseDateUtc);
+        _movie.UpdateInformation(_movie.Title, _movie.Description, _movie.Genre, 120, _movie.ReleaseDateUtc);
         _theater.AddScreen("1");
         Screen screen = _theater.GetScreenByName("1");
         DateTime futureDateTime = DateTime.Now.AddDays(1);
         _theater.AddShowtime(futureDateTime, 9.99m, screen.Id, _movie.Id);
 
-        DateTime futureDateTimeWithNotEnoughBufferTime = futureDateTime.AddMinutes(_movie.Duration.TotalMinutes).AddMinutes(49);
+        DateTime futureDateTimeWithNotEnoughBufferTime = futureDateTime.AddMinutes(_movie.DurationMins).AddMinutes(49);
 
         // Act & Assert
-        TheaterException? exception = Assert.Throws<TheaterException>(() => _theater.AddShowtime(futureDateTime.AddMinutes(49) + _movie.Duration, 9.99m, screen.Id, _movie.Id));
+        TheaterException? exception = Assert.Throws<TheaterException>(() => _theater.AddShowtime(futureDateTime.AddMinutes(_movie.DurationMins).AddMinutes(49), 9.99m, screen.Id, _movie.Id));
         exception.Message.Should().Be("Screen needs at least 50mins before next Showtime");
     }
 
@@ -369,13 +369,13 @@ internal class TheaterTests
     public void AddShowtime_ToScreenWithExistingShowtimeMoreThan50MinutesBetween_ShowtimeAdded()
     {
         // Arrange
-        _movie.UpdateInformation(_movie.Title, _movie.Description, _movie.Genre, TimeSpan.FromMinutes(120), _movie.ReleaseDateUtc);
+        _movie.UpdateInformation(_movie.Title, _movie.Description, _movie.Genre, 120, _movie.ReleaseDateUtc);
         _theater.AddScreen("1");
         Screen screen = _theater.GetScreenByName("1");
         DateTime futureDateTime = DateTime.Now.AddDays(1);
         _theater.AddShowtime(futureDateTime, 9.99m, screen.Id, _movie.Id);
 
-        DateTime futureDateTimeWithEnoughBufferTime = futureDateTime.AddMinutes(_movie.Duration.TotalMinutes).AddMinutes(51);
+        DateTime futureDateTimeWithEnoughBufferTime = futureDateTime.AddMinutes(_movie.DurationMins).AddMinutes(51);
 
         // Act
         _theater.AddShowtime(futureDateTimeWithEnoughBufferTime, 9.99m, screen.Id, _movie.Id);
@@ -475,8 +475,8 @@ internal class TheaterTests
     public void GetMoviesWithActiveShowtimes_ThreeActiveShowtimesForTwoMoviesAndOnePastShowTimeForADifferentMovie_TwoMoviesReturned()
     {
         // Arrange
-        Movie movie1 = new(1, "Movie A", "Description A", TimeSpan.FromMinutes(136), "Action", new DateTime(2022, 1, 1));
-        Movie movie2 = new(2, "Movie B", "Description B", TimeSpan.FromMinutes(136), "Action", new DateTime(2022, 1, 1));
+        Movie movie1 = new(1, "Movie A", "Description A", 136, "Action", new DateTime(2022, 1, 1));
+        Movie movie2 = new(2, "Movie B", "Description B", 136, "Action", new DateTime(2022, 1, 1));
 
         _theater.AddScreen("1");
         Screen screen = _theater.GetScreenByName("1");

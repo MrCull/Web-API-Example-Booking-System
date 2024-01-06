@@ -15,7 +15,7 @@ public class TheaterChainTests
     [SetUp]
     public void Setup()
     {
-        _movie = new Movie(0, "Movie A", "Description A", TimeSpan.FromMinutes(136), "Action", new DateTime(2022, 1, 1));
+        _movie = new Movie(0, "Movie A", "Description A", 136, "Action", new DateTime(2022, 1, 1));
         List<Movie> movies = [_movie];
 
         _theaterChain = new TheaterChain(1, "Chain A", "Description A", movies);
@@ -136,7 +136,7 @@ public class TheaterChainTests
     public void AddMovie_ToTheaterChain_MovieIsAdded()
     {
         // Act
-        Movie movie = _theaterChain.AddMovie("Movie B", "Description B", "Horror", TimeSpan.FromMinutes(70), new DateTime(2000, 1, 1));
+        Movie movie = _theaterChain.AddMovie("Movie B", "Description B", "Horror", 70, new DateTime(2000, 1, 1));
 
         // Assert
         _theaterChain.Movies.Count.Should().Be(2);
@@ -144,7 +144,7 @@ public class TheaterChainTests
         movie.Title.Should().Be("Movie B");
         movie.Description.Should().Be("Description B");
         movie.Genre.Should().Be("Horror");
-        movie.Duration.Should().Be(TimeSpan.FromMinutes(70));
+        movie.DurationMins.Should().Be(70);
         movie.ReleaseDateUtc.Should().Be(new DateTime(2000, 1, 1));
     }
 
@@ -159,7 +159,7 @@ public class TheaterChainTests
         _theaterChain.AddMovie(_movie);
 
         // Act
-        _theaterChain.UpdateMovie(_movie.Id, "Updated Movie Title", "Updated Description", "Updated Genre", TimeSpan.FromMinutes(150), new DateTime(2022, 12, 1));
+        _theaterChain.UpdateMovie(_movie.Id, "Updated Movie Title", "Updated Description", "Updated Genre", 150, new DateTime(2022, 12, 1));
 
         // Assert
         Movie? movieInChain = _theaterChain.Movies.Find(m => m.Id == _movie.Id);
@@ -167,7 +167,7 @@ public class TheaterChainTests
         movieInChain!.Title.Should().Be("Updated Movie Title");
         movieInChain.Description.Should().Be("Updated Description");
         movieInChain.Genre.Should().Be("Updated Genre");
-        movieInChain.Duration.Should().Be(TimeSpan.FromMinutes(150));
+        movieInChain.DurationMins.Should().Be(150);
         movieInChain.ReleaseDateUtc.Should().Be(new DateTime(2022, 12, 1));
     }
 
@@ -250,8 +250,8 @@ public class TheaterChainTests
     {
         // Arrange
         // One already exists from the setup, and 2 more will be added here.
-        _theaterChain.AddMovie("Movie A", "Description A", "Action", TimeSpan.FromMinutes(136), new DateTime(2022, 1, 1));
-        _theaterChain.AddMovie("Movie B", "Description B", "Horror", TimeSpan.FromMinutes(70), new DateTime(2000, 1, 1));
+        _theaterChain.AddMovie("Movie A", "Description A", "Action", 136, new DateTime(2022, 1, 1));
+        _theaterChain.AddMovie("Movie B", "Description B", "Horror", 70, new DateTime(2000, 1, 1));
 
         // Act
         List<Movie> movies = _theaterChain.GetMovies();

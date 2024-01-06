@@ -15,7 +15,7 @@ internal class ShowtimeTests
     [SetUp]
     public void Setup()
     {
-        _movie = new Movie(1, "Movie Title", "Description", TimeSpan.FromMinutes(120), "Genre", new DateTime(2022, 1, 1));
+        _movie = new Movie(1, "Movie Title", "Description", 120, "Genre", new DateTime(2022, 1, 1));
         _screen = new Screen(1, "1");
         _screen.AddSeats(["A1", "A2", "A3", "A4", "A5"]);
         _showtime = new Showtime(1, _movie, _screen, DateTime.UtcNow.AddDays(1), 9.99m);

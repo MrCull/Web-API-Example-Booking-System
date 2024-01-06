@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
 
-public class Movie(int id, string title, string description, TimeSpan duration, string genre, DateTime releaseDateUtc)
+public class Movie(int id, string title, string description, int durationMins, string genre, DateTime releaseDateUtc)
 {
     public int Id { get; private set; } = id;
 
@@ -16,7 +16,7 @@ public class Movie(int id, string title, string description, TimeSpan duration, 
     public string Description { get; private set; } = description;
 
     [Required]
-    public TimeSpan Duration { get; private set; } = duration;
+    public int DurationMins { get; private set; } = durationMins;
 
     [Required]
     [StringLength(50, ErrorMessage = "Genre length can't be more than 50 characters.")]
@@ -48,12 +48,12 @@ public class Movie(int id, string title, string description, TimeSpan duration, 
         TheaterChainMovieStatus = TheaterChainMovieStatus.NoLongerAvailable;
     }
 
-    public void UpdateInformation(string title, string description, string genre, TimeSpan duration, DateTime releaseDate)
+    public void UpdateInformation(string title, string description, string genre, int durationMins, DateTime releaseDate)
     {
         Title = title;
         Description = description;
         Genre = genre;
-        Duration = duration;
+        DurationMins = durationMins;
         ReleaseDateUtc = releaseDate;
     }
 }
