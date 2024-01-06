@@ -15,6 +15,7 @@ public class Movie(int id, string title, string description, int durationMins, s
     [StringLength(500, ErrorMessage = "Description length can't be more than 500 characters.")]
     public string Description { get; private set; } = description;
 
+    [Range(1, 1440, ErrorMessage = "Only positive number allowed and up to 1 day in total")]
     [Required]
     public int DurationMins { get; private set; } = durationMins;
 
