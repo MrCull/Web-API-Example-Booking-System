@@ -261,5 +261,31 @@ public class TheaterChainTests
         movies.Should().Contain(_movie);
     }
 
+    [Test]
+    /// As a Theater Chain Manager,
+    /// I want to get a movie by its ID,
+    /// So that I can see its details.
+    /// AC: The system allows for getting a movie by its ID.
+    public void GetMovieById_MovieExists_MovieReturned()
+    {
+        // Act
+        Movie? movie = _theaterChain.GetMovieById(_movie.Id);
+
+        // Assert
+        movie.Should().NotBeNull();
+        movie!.Should().Be(_movie);
+    }
+
+    [Test]
+    /// As a Theater Chain Manager,
+    /// I want to ensure that getting a non-existent movie by its ID has no effect,
+    /// So that the integrity of our movie data is maintained.
+    /// AC: MovieChainException thrown with message "Movie with [{id}] does not exist"
+    public void GetMovieById_InvalidMovieId_FailsToGetMovie()
+    {
+        // Act & Assert
+        MovieChainException? movieChainException = Assert.Throws<MovieChainException>(() => _theaterChain.GetMovieById(-1));
+        movieChainException.Message.Should().Be("Movie with id [-1] does not exist");
+    }
     #endregion
 }

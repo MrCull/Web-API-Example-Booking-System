@@ -1,5 +1,6 @@
 ﻿
 using Domain.Aggregates.Exceptions;
+using Infrastructure.Repository;
 
 namespace Api;
 
@@ -28,8 +29,15 @@ public class ExceptionHandlingMiddleware
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsync(domainException.Message);
         }
-        catch (Exception)
+        catch (EntityNotExistsException entityNotExistsException)
         {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync(entityNotExistsException.Message);
+        }
+        catch (Exception exception)
+        {
+            ILogger<ExceptionHandlingMiddleware> logger = context.RequestServices.GetRequiredService<ILogger<ExceptionHandlingMiddleware>>();
+            logger.LogError(exception, "An error occurred while processing the request.");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsync("An internal server error occurred.");
         }

@@ -2,7 +2,9 @@ using Api;
 using Api.Dtos;
 using Api.Services;
 using Domain.Aggregates.TheaterChainAggregate;
+using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Azure.Cosmos;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -13,6 +15,20 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<CosmosClient>(serviceProvider =>
+{
+    return new CosmosClient(
+        accountEndpoint: "https://localhost:8081/",
+        // below is the common key that is used for all local Cosmos DB Emulator instances
+        authKeyOrResourceToken: "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+    );
+});
+
+builder.Services.AddScoped<IRepository<TheaterChain>>(serviceProvider =>
+{
+    CosmosClient cosmosClient = serviceProvider.GetRequiredService<CosmosClient>();
+    return new Repository<TheaterChain>(cosmosClient, "TheaterChainDB", "TheaterChain");
+});
 
 string? JwtKey = builder.Configuration["Jwt:Key"];
 string? JwtIssuer = builder.Configuration["Jwt:Issuer"];
@@ -22,6 +38,7 @@ if (string.IsNullOrEmpty(JwtKey) || string.IsNullOrEmpty(JwtIssuer) || string.Is
 {
     throw new Exception("Jwt:Key, Jwt:Issuer, and Jwt:Audience must be set in appsettings.json");
 }
+
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -63,6 +80,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    //ServicePointManager.ServerCertificateValidationCallback +=
+    //(sender, cert, chain, sslPolicyErrors) => true;
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -71,76 +91,122 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+# region TheaterChain
 
-string[] summaries = new[]
+app.MapPost("/api/v1/theater-chains/{chainId}/movies", async
+    (ITheaterChainDtoMapperService mapperService, IRepository<TheaterChain> theaterChainRepository, CancellationToken cancellationToken,
+    int chainId, MovieWithoutIdDto movieWithoutIdDto) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
+    if (theaterChain is null) return Results.NotFound($"Theater chain[{chainId}] not found");
 
-app.MapGet("/weatherforecast", () =>
+    Movie movieAdded = theaterChain.AddMovie(movieWithoutIdDto.Title, movieWithoutIdDto.Description, movieWithoutIdDto.Genre, movieWithoutIdDto.DurationMins, movieWithoutIdDto.ReleaseDateUtc);
+
+    await theaterChainRepository.UpdateAsync(theaterChain, cancellationToken);
+
+    MovieDto movieAddedDto = mapperService.MapMovieToMovieDto(movieAdded);
+
+    return Results.Created($"/api/v1/theater-chains/{chainId}/movies/{movieAdded.Id}", movieAddedDto);
+});
+
+
+app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}", async
+    (ITheaterChainDtoMapperService mapperService, IRepository<TheaterChain> theaterChainRepository, CancellationToken cancellationToken,
+    int chainId, MovieDto moviDto) =>
 {
-    //    throw new MovieException("Mooov excpt!");
+    TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
+    if (theaterChain is null) return Results.NotFound($"Theater chain[{chainId}] not found.");
 
-    int[] forecast = Enumerable.Range(1, 5).Select(index =>
-            Random.Shared.Next(-20, 55)
-                    )
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    // Check if the movie exists in the theater chain
+    Movie existingMovie = theaterChain.GetMovieById(moviDto.Id);
+    if (existingMovie is null) return Results.NotFound($"Movie[{moviDto?.Id}] not found in the theater chain[{chainId}].");
 
-TheaterChain _theaterChain = new(1, "Chain A", "Description A", []);
-_theaterChain.AddMovie("Movie A", "Description A", "Genre A", 120, DateTime.UtcNow);
+    // Update the movie with the new details from the movieDto
+    theaterChain.UpdateMovie(existingMovie.Id, moviDto.Title, moviDto.Description, moviDto.Genre, moviDto.DurationMins, moviDto.ReleaseDateUtc);
 
-app.MapPost("/api/v1/theater-chains/{chainId}/movies", (ITheaterChainDtoMapperService mapperService,
-    int chainId, Movie movieToAdd) =>
+    // Save changes to the repository
+    await theaterChainRepository.UpdateAsync(theaterChain, cancellationToken);
+
+    // Optionally map the updated movie back to a DTO to return in the response
+    MovieDto updatedMovieDto = mapperService.MapMovieToMovieDto(existingMovie);
+
+    return Results.Ok(updatedMovieDto);
+});
+
+
+app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}/no-longer-available", async
+    (IRepository<TheaterChain> theaterChainRepository, ITheaterChainDtoMapperService mapperService,
+    int chainId, int id, CancellationToken cancellationToken) =>
 {
-    Movie movieAdded = _theaterChain.AddMovie(movieToAdd.Title, movieToAdd.Description, movieToAdd.Genre, movieToAdd.DurationMins, movieToAdd.ReleaseDateUtc);
+    // Retrieve the TheaterChain by ID
+    TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
+    if (theaterChain is null) return Results.NotFound($"Theater chain[{chainId}] not found.");
 
-    MovieDto movieDto = mapperService.MapMovieToMovideDto(movieAdded);
+    // Check if the movie exists in the theater chain
+    Movie? existingMovie = theaterChain.GetMovieById(id);
+    if (existingMovie is null) return Results.NotFound($"Movie[{id}] not found in theater chain[{chainId}].");
 
-    return Results.Created($"/api/v1/theater-chains/{chainId}/movies/{movieAdded.Id}", movieDto);
-})
-    .WithOpenApi();
+    // Mark the movie as no longer available
+    theaterChain.MarkMovieAsNoLongerAvailable(id);
 
-//app.MapPost("/api/v1/theater-chains/{chainId}/movies/add", (MovieService movieService, int chainId, string title, string description, string genre, TimeSpan duration, DateTime releaseDateUtc) =>
-//{
-//    movieService.AddMovie(chainId, title, description, genre, duration, releaseDateUtc);
-//    // Return appropriate response
-//});
+    // Save changes to the repository
+    await theaterChainRepository.UpdateAsync(theaterChain, cancellationToken);
 
-//app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}", (MovieService movieService, int chainId, int id, string title, string description, string genre, TimeSpan duration, DateTime releaseDateUtc) =>
-//{
-//    // Update movie logic
-//});
+    Movie movieUpdated = theaterChain.GetMovieById(id);
+    MovieDto movieUpdatedDto = mapperService.MapMovieToMovieDto(movieUpdated);
 
-//app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}/no-longer-available", (MovieService movieService, int chainId, int id) =>
-//{
-//    // Mark as no longer available logic
-//});
+    return Results.Ok(movieUpdatedDto);
+});
 
 //app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}/available", (MovieService movieService, int chainId, int id) =>
 //{
 //    // Mark as available logic
 //});
 
-//app.MapGet("/api/v1/theater-chains/{chainId}/movies/{id}", (int chainId, int id) =>
-//{
-//    return _theaterChain.GetMovieBy
-//});
-
-app.MapGet("/api/v1/theater-chains/{chainId}/movies", (ITheaterChainDtoMapperService mapperService, int chainId) =>
+app.MapGet("/api/v1/theater-chains/{chainId}/movies/{id}", async
+    (ITheaterChainDtoMapperService mapperService, IRepository<TheaterChain> theaterChainRepository, CancellationToken cancellationToken,
+    int chainId, int movieId) =>
 {
-    List<Movie> movies = _theaterChain.GetMovies();
+    TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
+    if (theaterChain is null)
+    {
+        return Results.NotFound();
+    }
 
-    return mapperService.MapMoviesToMoviesDto(movies);
+    Movie movie = theaterChain.GetMovieById(movieId);
+    if (movie is null)
+    {
+        return Results.NotFound();
+    }
+
+    MovieDto movieDto = mapperService.MapMovieToMovieDto(movie);
+    return Results.Ok(movieDto);
+});
+
+
+app.MapGet("/api/v1/theater-chains/{chainId}/movies", async
+    (ITheaterChainDtoMapperService mapperService, IRepository<TheaterChain> theaterChainRepository, int chainId, CancellationToken cancellationToken)
+    =>
+{
+    TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
+
+    if (theaterChain is null)
+    {
+        return Results.NotFound();
+    }
+
+    List<Movie> movies = theaterChain.GetMovies();
+    IEnumerable<MovieDto> moviesDto = mapperService.MapMoviesToMoviesDto(movies);
+
+    return Results.Ok(moviesDto);
 });
 
 //app.MapDelete("/api/v1/theater-chains/{chainId}/movies/{id}", (MovieService movieService, int chainId, int id) =>
 //{
 //    // Delete movie logic
 //});
+
+#endregion TheaterChain
 
 
 app.Run();

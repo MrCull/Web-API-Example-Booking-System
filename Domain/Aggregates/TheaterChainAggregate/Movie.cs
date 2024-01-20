@@ -49,7 +49,7 @@ public class Movie(int id, string title, string description, int durationMins, s
         TheaterChainMovieStatus = TheaterChainMovieStatus.NoLongerAvailable;
     }
 
-    public void UpdateInformation(string title, string description, string genre, int durationMins, DateTime releaseDate)
+    internal void UpdateInformation(string title, string description, string genre, int durationMins, DateTime releaseDate)
     {
         Title = title;
         Description = description;

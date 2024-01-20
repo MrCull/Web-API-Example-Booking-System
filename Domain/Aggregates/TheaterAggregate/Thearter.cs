@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
 
-public class Theater
+public class Theater : IAggregrateRoot
 {
     public int Id { get; private set; }
 

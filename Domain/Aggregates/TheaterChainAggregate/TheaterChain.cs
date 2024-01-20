@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
 
-public class TheaterChain
+public class TheaterChain : IAggregrateRoot
 {
     public int Id { get; private set; }
 
@@ -88,7 +88,9 @@ public class TheaterChain
 
     public Movie AddMovie(string title, string description, string genre, int durationMins, DateTime releaseDateUtc)
     {
-        Movie movie = new(0, title, description, durationMins, genre, releaseDateUtc);
+        int id = Movies.Any() ? Movies.Max(m => m.Id) + 1 : 1;
+
+        Movie movie = new(id, title, description, durationMins, genre, releaseDateUtc);
         Movies.Add(movie);
         return movie;
     }
@@ -142,4 +144,16 @@ public class TheaterChain
 
     public List<Movie> GetMovies()
         => Movies;
+
+    public Movie GetMovieById(int id)
+    {
+        Movie? movie = Movies.Find(m => m.Id == id);
+
+        if (movie is null)
+        {
+            throw new MovieChainException($"Movie with id [{id}] does not exist");
+        }
+
+        return movie;
+    }
 }
