@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-public class SeatReservation : ISeatReservation
+internal class SeatReservation : ISeatReservation
 {
     public SeatReservation(DateTime reservationTimeUtc, DateTime reservationTimeoutUtc, Showtime showtime, List<Seat> seats)
     {

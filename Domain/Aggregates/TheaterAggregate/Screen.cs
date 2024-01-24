@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
 
-public class Screen(int theaterId, string screenNumber) : IScreen
+internal class Screen(int theaterId, string screenNumber) : IScreen
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
 

@@ -85,7 +85,7 @@ public class Theater : IAggregrateRoot, ITheater
         }
     }
 
-    public Screen GetScreenByName(string screenName)
+    internal Screen GetScreenByName(string screenName)
     {
         Screen? screen = Screens.Find(s => s.ScreenNumber == screenName);
         if (screen is not null)
