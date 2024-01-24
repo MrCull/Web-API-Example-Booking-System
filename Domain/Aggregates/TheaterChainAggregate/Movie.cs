@@ -1,4 +1,4 @@
-﻿using Domain.Aggregates.Exceptions;
+﻿using Domain.Exceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;

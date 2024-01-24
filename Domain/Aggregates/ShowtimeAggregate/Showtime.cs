@@ -1,6 +1,6 @@
-﻿using Domain.Aggregates.Exceptions;
-using Domain.Aggregates.TheaterAggregate;
+﻿using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
+using Domain.Exceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.ShowtimeAggregate;
