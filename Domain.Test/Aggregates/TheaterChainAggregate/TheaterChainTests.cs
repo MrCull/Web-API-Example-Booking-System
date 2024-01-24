@@ -58,7 +58,7 @@ public class TheaterChainTests
         _theaterChain.UpdateTheater(_theater.Id, updatedName, updatedLocation);
 
         // Assert
-        Theater? updatedTheater = _theaterChain.Theaters.FirstOrDefault(t => t.Id == _theater.Id);
+        ITheater? updatedTheater = _theaterChain.Theaters.FirstOrDefault(t => t.Id == _theater.Id);
         updatedTheater.Should().NotBeNull();
         updatedTheater!.Name.Should().Be(updatedName);
         updatedTheater.Location.Should().Be(updatedLocation);
@@ -89,7 +89,7 @@ public class TheaterChainTests
         // Arrange
         _theater.AddScreen("1");
 
-        Screen _screen = _theater.GetScreenByName("1");
+        IScreen _screen = _theater.GetScreenByName("1");
 
         _theater.AddShowtime(DateTime.UtcNow.AddDays(1), 9.99m, _screen.Id, _movie.Id);
 
@@ -136,7 +136,7 @@ public class TheaterChainTests
     public void AddMovie_ToTheaterChain_MovieIsAdded()
     {
         // Act
-        Movie movie = _theaterChain.AddMovie("Movie B", "Description B", "Horror", 70, new DateTime(2000, 1, 1));
+        IMovie movie = _theaterChain.AddMovie("Movie B", "Description B", "Horror", 70, new DateTime(2000, 1, 1));
 
         // Assert
         _theaterChain.Movies.Count.Should().Be(2);
@@ -162,7 +162,7 @@ public class TheaterChainTests
         _theaterChain.UpdateMovie(_movie.Id, "Updated Movie Title", "Updated Description", "Updated Genre", 150, new DateTime(2022, 12, 1));
 
         // Assert
-        Movie? movieInChain = _theaterChain.Movies.Find(m => m.Id == _movie.Id);
+        IMovie? movieInChain = _theaterChain.Movies.Find(m => m.Id == _movie.Id);
         movieInChain.Should().NotBeNull();
         movieInChain!.Title.Should().Be("Updated Movie Title");
         movieInChain.Description.Should().Be("Updated Description");
@@ -199,7 +199,7 @@ public class TheaterChainTests
         // Arrange
         _theater.AddScreen("1");
 
-        Screen screen = _theater.GetScreenByName("1");
+        IScreen screen = _theater.GetScreenByName("1");
 
         _theater.AddShowtime(DateTime.Now.AddDays(1), 9.99m, screen.Id, _movie.Id);
 
@@ -254,7 +254,7 @@ public class TheaterChainTests
         _theaterChain.AddMovie("Movie B", "Description B", "Horror", 70, new DateTime(2000, 1, 1));
 
         // Act
-        List<Movie> movies = _theaterChain.GetMovies();
+        List<IMovie> movies = _theaterChain.GetMovies();
 
         // Assert
         movies.Count.Should().Be(3);
@@ -269,7 +269,7 @@ public class TheaterChainTests
     public void GetMovieById_MovieExists_MovieReturned()
     {
         // Act
-        Movie? movie = _theaterChain.GetMovieById(_movie.Id);
+        IMovie? movie = _theaterChain.GetMovieById(_movie.Id);
 
         // Assert
         movie.Should().NotBeNull();

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
 
-public class TheaterChain : IAggregrateRoot
+public class TheaterChain : IAggregrateRoot, ITheaterChain
 {
     public int Id { get; private set; }
 
@@ -32,7 +32,7 @@ public class TheaterChain : IAggregrateRoot
 
     public void AddTheater(string name, string location)
     {
-        Theater? existingTheater = Theaters.Find(t => t.Name == name);
+        ITheater? existingTheater = Theaters.Find(t => t.Name == name);
         if (existingTheater != null)
         {
             throw new MovieChainException("Theater already exists");
@@ -53,7 +53,7 @@ public class TheaterChain : IAggregrateRoot
         Theater? theater = Theaters.Find(t => t.Id == theaterId);
         if (theater != null)
         {
-            IEnumerable<Showtime> showtimes = theater.GetActiveShowtimes();
+            IEnumerable<IShowtime> showtimes = theater.GetActiveShowtimes();
 
             if (showtimes.Any())
             {
@@ -70,7 +70,7 @@ public class TheaterChain : IAggregrateRoot
 
     public void UpdateTheater(int id, string updatedName, string updatedLocation)
     {
-        Theater? theater = Theaters.Find(t => t.Id == id);
+        ITheater? theater = Theaters.Find(t => t.Id == id);
         if (theater != null)
         {
             theater.UpdateInformation(updatedName, updatedLocation);
@@ -86,7 +86,7 @@ public class TheaterChain : IAggregrateRoot
         Movies.Add(movie);
     }
 
-    public Movie AddMovie(string title, string description, string genre, int durationMins, DateTime releaseDateUtc)
+    public IMovie AddMovie(string title, string description, string genre, int durationMins, DateTime releaseDateUtc)
     {
         int id = Movies.Any() ? Movies.Max(m => m.Id) + 1 : 1;
 
@@ -110,7 +110,7 @@ public class TheaterChain : IAggregrateRoot
 
     public void MarkMovieAsNoLongerAvailable(int id)
     {
-        Movie? movie = Movies.Find(m => m.Id == id);
+        IMovie? movie = Movies.Find(m => m.Id == id);
         if (movie != null)
         {
             bool moveHasFutureShowtimes = HasMovieGotAnyFutureShowtimes(movie);
@@ -128,7 +128,7 @@ public class TheaterChain : IAggregrateRoot
 
     public void MarkMovieAsAvailable(int id)
     {
-        Movie? movie = Movies.Find(m => m.Id == id);
+        IMovie? movie = Movies.Find(m => m.Id == id);
         if (movie != null)
         {
             movie.MarkAsAvailable();
@@ -139,15 +139,15 @@ public class TheaterChain : IAggregrateRoot
         }
     }
 
-    private bool HasMovieGotAnyFutureShowtimes(Movie movie)
+    private bool HasMovieGotAnyFutureShowtimes(IMovie movie)
     => Theaters.Any(t => t.HasMovieGotAnyFutureShowtimes(movie.Id));
 
-    public List<Movie> GetMovies()
-        => Movies;
+    public List<IMovie> GetMovies()
+        => Movies.Select(m => (IMovie)m).ToList();
 
-    public Movie GetMovieById(int id)
+    public IMovie GetMovieById(int id)
     {
-        Movie? movie = Movies.Find(m => m.Id == id);
+        IMovie? movie = Movies.Find(m => m.Id == id);
 
         if (movie is null)
         {

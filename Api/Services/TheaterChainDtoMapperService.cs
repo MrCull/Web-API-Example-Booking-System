@@ -5,7 +5,7 @@ namespace Api.Services
 {
     public class TheaterChainDtoMapperService : ITheaterChainDtoMapperService
     {
-        public MovieDto MapMovieToMovieDto(Movie movie)
+        public MovieDto MapMovieToMovieDto(IMovie movie)
         {
             MovieStatus movieStatus = movie.TheaterChainMovieStatus switch
             {
@@ -17,7 +17,7 @@ namespace Api.Services
             return new MovieDto(movie.Id, movie.Title, movie.Description, movie.DurationMins, movie.Genre, movie.ReleaseDateUtc, movieStatus);
         }
 
-        public IEnumerable<MovieDto> MapMoviesToMoviesDto(List<Movie> movies)
+        public IEnumerable<MovieDto> MapMoviesToMoviesDto(List<IMovie> movies)
             => movies.Select(MapMovieToMovieDto);
     }
 }

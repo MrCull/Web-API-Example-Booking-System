@@ -2,7 +2,7 @@
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-public class Booking(Guid id, int showtimeId, DateTime bookingTimeUtc, Showtime showtime, SeatReservation seatReservation)
+public record Booking(Guid id, DateTime bookingTimeUtc, IShowtime showtime, ISeatReservation seatReservation) : IBooking
 {
     [Required]
     public Guid Id { get; private set; } = id;
@@ -10,9 +10,9 @@ public class Booking(Guid id, int showtimeId, DateTime bookingTimeUtc, Showtime 
     public DateTime BookingTimeUtc { get; private set; } = bookingTimeUtc;
 
     // Navigation properties
-    public Showtime Showtime { get; private set; } = showtime;
+    public IShowtime Showtime { get; private set; } = showtime;
 
-    public SeatReservation SeatReservation { get; private set; } = seatReservation;
+    public ISeatReservation SeatReservation { get; private set; } = seatReservation;
 }
 
 

@@ -83,10 +83,10 @@ internal class ShowtimeTests
     {
         // Arrange
         List<string> seatsRequired = ["A1", "A2", "A3"];
-        SeatReservation seatReservation = _showtime.ProvisionallyReserveSeatsAndReturnReservation(seatsRequired);
+        ISeatReservation seatReservation = _showtime.ProvisionallyReserveSeatsAndReturnReservation(seatsRequired);
 
         // Act
-        Booking booking = _showtime.CompleteBookingForSeatReservationAndReturnBooking(seatReservation.Id);
+        IBooking booking = _showtime.CompleteBookingForSeatReservationAndReturnBooking(seatReservation.Id);
 
         // Assert
         booking.Id.Should().NotBe(Guid.Empty);
@@ -106,7 +106,7 @@ internal class ShowtimeTests
     {
         // Arrange
         List<string> seatsRequired = ["A1", "A2", "A3"];
-        SeatReservation seatReservation = _showtime.ProvisionallyReserveSeatsAndReturnReservation(seatsRequired);
+        ISeatReservation seatReservation = _showtime.ProvisionallyReserveSeatsAndReturnReservation(seatsRequired);
 
         seatReservation.SetReservationTimeout(DateTime.UtcNow.AddMinutes(-1));
 
@@ -138,7 +138,7 @@ internal class ShowtimeTests
     {
         // Arrange
         List<string> seatsRequired = ["A1", "A2", "A3"];
-        SeatReservation seatReservation = _showtime.ProvisionallyReserveSeatsAndReturnReservation(seatsRequired);
+        ISeatReservation seatReservation = _showtime.ProvisionallyReserveSeatsAndReturnReservation(seatsRequired);
 
         _showtime.CompleteBookingForSeatReservationAndReturnBooking(seatReservation.Id);
 

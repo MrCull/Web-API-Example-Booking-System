@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Domain.Aggregates.ShowtimeAggregate;
+﻿using Domain.Aggregates.ShowtimeAggregate;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
 
-public class Screen(int theaterId, string screenNumber)
+public class Screen(int theaterId, string screenNumber) : IScreen
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
 

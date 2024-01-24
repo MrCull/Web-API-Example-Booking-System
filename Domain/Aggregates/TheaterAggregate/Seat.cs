@@ -2,7 +2,7 @@
 
 namespace Domain.Aggregates.TheaterAggregate;
 
-public class Seat(string seatNumber)
+public record Seat(string seatNumber) : ISeat
 {
     [Required]
     public Guid Id { get; private set; } = Guid.NewGuid();

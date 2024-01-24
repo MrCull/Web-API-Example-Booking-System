@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-public class Showtime : IAggregrateRoot
+public class Showtime : IAggregrateRoot, IShowtime
 {
     public Showtime(int id, Movie movie, Screen screen, DateTime showDateTimeUtc, decimal price)
     {
@@ -38,7 +38,7 @@ public class Showtime : IAggregrateRoot
     internal List<SeatReservation> SeatReservations { get; private set; }
     internal List<Booking> Bookings { get; private set; }
 
-    public Booking CompleteBookingForSeatReservationAndReturnBooking(Guid reservationId)
+    public IBooking CompleteBookingForSeatReservationAndReturnBooking(Guid reservationId)
     {
         SeatReservation? seatReservation = SeatReservations
             .Find(SeatReservations => SeatReservations.Id == reservationId);
@@ -58,26 +58,26 @@ public class Showtime : IAggregrateRoot
 
         seatReservation.Confirm();
 
-        Booking booking = new(Guid.NewGuid(), Id, DateTime.UtcNow, this, seatReservation);
+        Booking booking = new(Guid.NewGuid(), DateTime.UtcNow, this, seatReservation);
         Bookings.Add(booking);
 
         return booking;
     }
 
-    public List<SeatReservation> GetSeatReservations()
+    internal List<SeatReservation> GetSeatReservations()
         => SeatReservations;
 
-    public List<SeatReservation> GetSeatReservationsBySeatNumbers(List<string> seatsRequired)
+    public List<ISeatReservation> GetSeatReservationsBySeatNumbers(List<string> seatsRequired)
     {
         throw new NotImplementedException();
     }
 
-    public List<Seat> GetSeats()
+    public List<ISeat> GetSeats()
     {
         throw new NotImplementedException();
     }
 
-    public SeatReservation ProvisionallyReserveSeatsAndReturnReservation(List<string> seatNames)
+    public ISeatReservation ProvisionallyReserveSeatsAndReturnReservation(List<string> seatNames)
     {
         List<string> alreadyReservedMatchingSeatNumbers = SeatReservations
             .Where(s => s.IsReservationCnfirmedOrAcitivePending())
@@ -107,7 +107,7 @@ public class Showtime : IAggregrateRoot
     internal bool HasActiveSeatReservations()
         => SeatReservations.Any(s => s.IsReservationCnfirmedOrAcitivePending());
 
-    internal void UpdateInformation(DateTime newDateTime, decimal newPrice, Screen screen)
+    public void UpdateInformation(DateTime newDateTime, decimal newPrice, Screen screen)
     {
         ShowDateTimeUtc = newDateTime;
         Price = newPrice;

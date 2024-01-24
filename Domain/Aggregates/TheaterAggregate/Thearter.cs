@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
 
-public class Theater : IAggregrateRoot
+public class Theater : IAggregrateRoot, ITheater
 {
     public int Id { get; private set; }
 
@@ -42,7 +42,7 @@ public class Theater : IAggregrateRoot
 
     public void AddScreen(string screenNumber)
     {
-        Screen? existingScreen = Screens.Find(s => s.ScreenNumber == screenNumber);
+        IScreen? existingScreen = Screens.Find(s => s.ScreenNumber == screenNumber);
         if (existingScreen is not null)
         {
             throw new TheaterException("Screen already exists");
@@ -83,10 +83,9 @@ public class Theater : IAggregrateRoot
         {
             throw new TheaterException("Screen needs at least 50mins before next Showtime");
         }
-
     }
 
-    internal Screen GetScreenByName(string screenName)
+    public Screen GetScreenByName(string screenName)
     {
         Screen? screen = Screens.Find(s => s.ScreenNumber == screenName);
         if (screen is not null)
@@ -99,7 +98,7 @@ public class Theater : IAggregrateRoot
         }
     }
 
-    public List<Screen> GetActiveScreens()
+    internal List<Screen> GetActiveScreens()
         => Screens.Where(s => s.IsEnabled).ToList();
 
     public void ReenableScreen(Guid id)
@@ -170,7 +169,7 @@ public class Theater : IAggregrateRoot
         }
     }
 
-    public IEnumerable<Showtime> GetActiveShowtimes()
+    internal IEnumerable<Showtime> GetActiveShowtimes()
         => Showtimes.Where(s => s.ShowDateTimeUtc > DateTime.UtcNow).
         OrderBy(s => s.ShowDateTimeUtc)
         .ToList();
@@ -202,7 +201,7 @@ public class Theater : IAggregrateRoot
         }
     }
 
-    public IEnumerable<Movie> GetMoviesWithActiveShowtimes()
+    public IEnumerable<IMovie> GetMoviesWithActiveShowtimes()
     {
         IEnumerable<int> activeMovieIds = Showtimes
             .Where(_ => _.ShowDateTimeUtc > DateTime.UtcNow)
@@ -216,7 +215,7 @@ public class Theater : IAggregrateRoot
       => Showtimes.ForEach(_ => _.ClearSeatReservationsWithExpiredTimeouts());
 
 
-    internal bool HasMovieGotAnyFutureShowtimes(int id)
+    public bool HasMovieGotAnyFutureShowtimes(int id)
         => GetActiveShowtimes().Any(s => s.Movie?.Id == id);
 }
 

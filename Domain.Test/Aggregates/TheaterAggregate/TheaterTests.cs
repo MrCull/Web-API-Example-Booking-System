@@ -164,7 +164,7 @@ internal class TheaterTests
         _theater.AddScreen("1");
 
         // Act
-        Screen screen = _theater.GetScreenByName("1");
+        IScreen screen = _theater.GetScreenByName("1");
 
         // Assert
         screen.ScreenNumber.Should().Be("1");
@@ -455,7 +455,7 @@ internal class TheaterTests
         List<string> seats = ["A1", "A2"];
         screen.AddSeats(seats);
 
-        SeatReservation seatReservation = showtime.ProvisionallyReserveSeatsAndReturnReservation(seats);
+        ISeatReservation seatReservation = showtime.ProvisionallyReserveSeatsAndReturnReservation(seats);
         showtime.CompleteBookingForSeatReservationAndReturnBooking(seatReservation.Id);
 
         // Act & Assert
@@ -486,7 +486,7 @@ internal class TheaterTests
         _theater.Showtimes.Add(new Showtime(3, movie2, screen, DateTime.Now.AddDays(-1), 9.99m));
 
         // Act
-        IEnumerable<Movie> movies = _theater.GetMoviesWithActiveShowtimes();
+        IEnumerable<IMovie> movies = _theater.GetMoviesWithActiveShowtimes();
 
         // Assert
         movies.Select(_ => _.Id).Should().Contain(movie1.Id);
@@ -538,7 +538,7 @@ internal class TheaterTests
 
         showtime.ProvisionallyReserveSeatsAndReturnReservation(["A1"]);
 
-        SeatReservation seatReservationToExpire = showtime.ProvisionallyReserveSeatsAndReturnReservation(["A2"]);
+        ISeatReservation seatReservationToExpire = showtime.ProvisionallyReserveSeatsAndReturnReservation(["A2"]);
         seatReservationToExpire.SetReservationTimeout(DateTime.UtcNow.AddMinutes(-1));
 
         // Act

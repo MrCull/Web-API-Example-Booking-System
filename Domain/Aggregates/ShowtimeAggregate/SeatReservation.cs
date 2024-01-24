@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Domain.Aggregates.TheaterAggregate;
+﻿using Domain.Aggregates.TheaterAggregate;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-public class SeatReservation
+public class SeatReservation : ISeatReservation
 {
     public SeatReservation(DateTime reservationTimeUtc, DateTime reservationTimeoutUtc, Showtime showtime, List<Seat> seats)
     {
@@ -13,7 +13,6 @@ public class SeatReservation
         Status = ReservationStatus.Reserved;
         Showtime = showtime;
         Seats = seats;
-
         Price = Showtime.Price;
     }
 
@@ -34,9 +33,9 @@ public class SeatReservation
     public ReservationStatus Status { get; private set; }
 
     // Navigation properties
-    public Showtime Showtime { get; private set; }
+    internal IShowtime Showtime { get; private set; }
 
-    public List<Seat> Seats { get; private set; }
+    internal List<Seat> Seats { get; private set; }
 
     internal void Confirm()
     {
@@ -53,7 +52,7 @@ public class SeatReservation
     internal bool IsTimedOut()
         => Status == ReservationStatus.Reserved && ReservationTimeoutUtc < DateTime.UtcNow;
 
-    internal void SetReservationTimeout(DateTime reservationTimeoutUtc)
+    public void SetReservationTimeout(DateTime reservationTimeoutUtc)
     {
         ReservationTimeoutUtc = reservationTimeoutUtc;
     }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
 
-public class Movie(int id, string title, string description, int durationMins, string genre, DateTime releaseDateUtc)
+public class Movie(int id, string title, string description, int durationMins, string genre, DateTime releaseDateUtc) : IMovie
 {
     public int Id { get; private set; } = id;
 
