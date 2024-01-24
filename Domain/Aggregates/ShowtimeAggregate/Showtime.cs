@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-internal class Showtime : IAggregrateRoot, IShowtime
+internal class Showtime : IShowtime
 {
     public Showtime(int id, Movie movie, Screen screen, DateTime showDateTimeUtc, decimal price)
     {

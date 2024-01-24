@@ -1,6 +1,6 @@
 ﻿namespace Domain.Aggregates.TheaterAggregate
 {
-    public interface ITheater
+    public interface ITheater : IAggregrateRoot
     {
         int Id { get; }
         string Location { get; }

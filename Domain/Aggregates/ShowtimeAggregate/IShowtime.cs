@@ -1,6 +1,6 @@
 ﻿namespace Domain.Aggregates.ShowtimeAggregate
 {
-    public interface IShowtime
+    public interface IShowtime : IAggregrateRoot
     {
         int Id { get; }
         decimal Price { get; }

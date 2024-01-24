@@ -24,10 +24,10 @@ builder.Services.AddSingleton<CosmosClient>(serviceProvider =>
     );
 });
 
-builder.Services.AddScoped<IRepository<TheaterChain>>(serviceProvider =>
+builder.Services.AddScoped<IRepository<ITheaterChain>>(serviceProvider =>
 {
     CosmosClient cosmosClient = serviceProvider.GetRequiredService<CosmosClient>();
-    return new Repository<TheaterChain>(cosmosClient, "TheaterChainDB", "TheaterChain");
+    return new Repository<ITheaterChain>(cosmosClient, "TheaterChainDB", "TheaterChain");
 });
 
 string? JwtKey = builder.Configuration["Jwt:Key"];
@@ -135,11 +135,11 @@ app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}", async
 
 
 app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}/no-longer-available", async
-    (IRepository<TheaterChain> theaterChainRepository, ITheaterChainDtoMapperService mapperService,
+    (IRepository<ITheaterChain> theaterChainRepository, ITheaterChainDtoMapperService mapperService,
     int chainId, int id, CancellationToken cancellationToken) =>
 {
     // Retrieve the TheaterChain by ID
-    TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
+    ITheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
     if (theaterChain is null) return Results.NotFound($"Theater chain[{chainId}] not found.");
 
     // Check if the movie exists in the theater chain
@@ -185,7 +185,7 @@ app.MapGet("/api/v1/theater-chains/{chainId}/movies/{id}", async
 
 
 app.MapGet("/api/v1/theater-chains/{chainId}/movies", async
-    (ITheaterChainDtoMapperService mapperService, IRepository<TheaterChain> theaterChainRepository, int chainId, CancellationToken cancellationToken)
+    (ITheaterChainDtoMapperService mapperService, IRepository<ITheaterChain> theaterChainRepository, int chainId, CancellationToken cancellationToken)
     =>
 {
     ITheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
