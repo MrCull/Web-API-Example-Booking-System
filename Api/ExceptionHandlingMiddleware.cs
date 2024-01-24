@@ -1,5 +1,4 @@
-﻿
-using Domain.Aggregates.Exceptions;
+﻿using Domain.Exceptions;
 using Infrastructure.Repository;
 
 namespace Api;

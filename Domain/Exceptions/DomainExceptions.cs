@@ -1,4 +1,4 @@
-﻿namespace Domain.Aggregates.Exceptions;
+﻿namespace Domain.Exceptions;
 
 public class MovieChainException : Exception
 {
