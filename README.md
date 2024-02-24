@@ -8,7 +8,7 @@ Contrary to the crowd, it piqued my interest as a perfect little project to exhi
 ## Tech Stack, Patterns & Dev practices
 - **.Net 8**: Use the latest (at the time of creation) .Net framework.
 - **C# 12**:
-- **Web API**: Using Minimal API for enhances performance.
+- **Web API**: RESTful and using Minimal API for enhances performance.
 - **Clean Onion Architecture**
 - **Docker Containers**
 - **Domain Driven Design**
