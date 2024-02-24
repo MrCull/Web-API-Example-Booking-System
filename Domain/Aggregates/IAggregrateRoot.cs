@@ -5,6 +5,6 @@ namespace Domain.Aggregates
     public interface IAggregrateRoot
     {
         [JsonProperty("id")]
-        public string Id { get; }
+        public int Id { get; }
     }
 }

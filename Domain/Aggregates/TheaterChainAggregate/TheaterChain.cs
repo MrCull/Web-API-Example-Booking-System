@@ -7,7 +7,7 @@ namespace Domain.Aggregates.TheaterChainAggregate;
 
 public class TheaterChain : ITheaterChain
 {
-    public string Id { get; private set; }
+    public int Id { get; private set; }
 
     [Required]
     [StringLength(100, ErrorMessage = "Theater chain name length can't be more than 100 characters.")]

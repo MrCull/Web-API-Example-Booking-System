@@ -2,7 +2,6 @@
 {
     public interface IShowtime : IAggregrateRoot
     {
-        int Id { get; }
         decimal Price { get; }
         DateTime ShowDateTimeUtc { get; }
 

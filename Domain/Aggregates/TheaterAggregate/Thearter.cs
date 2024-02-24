@@ -7,7 +7,7 @@ namespace Domain.Aggregates.TheaterAggregate;
 
 internal class Theater : ITheater
 {
-    public string Id { get; private set; }
+    public int Id { get; private set; }
 
     [Required]
     [StringLength(100, ErrorMessage = "Theater name length can't be more than 100 characters.")]

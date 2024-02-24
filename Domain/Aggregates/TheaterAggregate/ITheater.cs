@@ -2,7 +2,6 @@
 {
     public interface ITheater : IAggregrateRoot
     {
-        int Id { get; }
         string Location { get; }
         string Name { get; }
 
