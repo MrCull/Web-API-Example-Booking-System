@@ -1,7 +1,10 @@
-﻿namespace Domain.Aggregates
+﻿using Newtonsoft.Json;
+
+namespace Domain.Aggregates
 {
     public interface IAggregrateRoot
     {
-        int Id { get; }
+        [JsonProperty("id")]
+        public string Id { get; }
     }
 }

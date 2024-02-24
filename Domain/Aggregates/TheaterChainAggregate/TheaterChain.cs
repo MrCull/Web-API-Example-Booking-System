@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
 
-internal class TheaterChain : ITheaterChain
+public class TheaterChain : ITheaterChain
 {
-    public int Id { get; private set; }
+    public string Id { get; private set; }
 
     [Required]
     [StringLength(100, ErrorMessage = "Theater chain name length can't be more than 100 characters.")]
@@ -21,7 +21,16 @@ internal class TheaterChain : ITheaterChain
     internal List<Theater> Theaters { get; private set; }
     internal List<Movie> Movies { get; private set; }
 
-    public TheaterChain(int id, string name, string description, List<Movie> movies)
+    public TheaterChain(int id, string name, string description)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        Theaters = [];
+        Movies = [];
+    }
+
+    internal TheaterChain(int id, string name, string description, List<Movie> movies)
     {
         Id = id;
         Name = name;
@@ -30,7 +39,20 @@ internal class TheaterChain : ITheaterChain
         Movies = [.. movies];
     }
 
-    public void AddTheater(string name, string location)
+
+    public List<ITheater> GetTheaters()
+        => Theaters.Select(t => (ITheater)t).ToList();
+
+
+    public ITheater? GetTheaterById(int id)
+    {
+        ITheater? theater = Theaters.Find(t => t.Id == id);
+        if (theater == null) throw new MovieChainException($"Theater with id [{id}] does not exist");
+
+        return theater;
+    }
+
+    public ITheater AddTheater(string name, string location)
     {
         ITheater? existingTheater = Theaters.Find(t => t.Name == name);
         if (existingTheater != null)
@@ -46,6 +68,7 @@ internal class TheaterChain : ITheaterChain
 
         Theater theater = new(0, name, location, Movies);
         Theaters.Add(theater);
+        return theater;
     }
 
     public void RemoveTheater(int theaterId)

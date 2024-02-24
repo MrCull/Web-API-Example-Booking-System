@@ -1,10 +1,14 @@
 ﻿using Api.Dtos;
+using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 
 namespace Api.Services;
 
 public interface ITheaterChainDtoMapperService
 {
-    MovieDto MapMovieToMovieDto(IMovie movie);
-    IEnumerable<MovieDto> MapMoviesToMoviesDto(List<IMovie> movies);
+    MovieWithIdDto MapMovieToMovieDto(IMovie movie);
+    IEnumerable<MovieWithIdDto> MapMoviesToMoviesWithIdDto(List<IMovie> movies);
+
+    TheaterWithIdDto MapTheaterToTheaterWithIdDto(ITheater theater);
+    IEnumerable<TheaterWithIdDto> MapTheatersToTheatersWithIdDto(List<ITheater> theaters);
 }

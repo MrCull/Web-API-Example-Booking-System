@@ -28,19 +28,64 @@ public class TheaterChainTests
 
     [Test]
     /// As a Theater Chain Manager,
+    /// I want to get a list of all theaters in our theater chain,
+    /// So that I can see what theaters are currently available.
+    /// AC: The system allows for listing all theaters in the theater chain.
+    public void GetTheaters_AllTheatersInChain_ListOfTheatersReturned()
+    {
+        // Act
+        List<ITheater> theaters = _theaterChain.GetTheaters();
+
+        // Assert
+        theaters.Count.Should().Be(1);
+        theaters.Should().Contain(_theater);
+    }
+
+    [Test]
+    /// As a Theater Chain Manager,
+    /// I want to get a theater by its ID,
+    /// So that I can see its details.
+    /// AC: The system allows for getting a theater by its ID.
+    public void GetTheaterById_TheaterExists_TheaterReturned()
+    {
+        // Act
+        ITheater? theater = _theaterChain.GetTheaterById(_theater.Id);
+
+        // Assert
+        theater.Should().NotBeNull();
+        theater!.Should().Be(_theater);
+    }
+
+    [Test]
+    /// As a Theater Chain Manager,
+    /// I want to ensure that getting a non-existent theater by its ID throws an exception,
+    /// So that the integrity of our theater data is maintained.
+    /// AC: MovieChainException thrown with message "Theater with [{id}] does not exist"
+    public void GetTheaterById_InvalidTheaterId_ExceptionWithMessageRaised()
+    {
+        // Act & Assert
+        MovieChainException? exception = Assert.Throws<MovieChainException>(() => _theaterChain.GetTheaterById(-1));
+        exception.Message.Should().Be("Theater with id [-1] does not exist");
+    }
+
+    [Test]
+    /// As a Theater Chain Manager,
     /// I want to update a theater's details in our theater chain,
     /// So that our theater information is always current and accurate for customers.
     /// AC: The system allows for updating the details of theaters in the theater chain.
     public void AddTheater_ToTheaterChain_TheaterIsAdded()
     {
         // Act
-        _theaterChain.AddTheater("New Theater Name", "New Location B");
+        ITheater addedTheater = _theaterChain.AddTheater("New Theater Name", "New Location B");
 
         // Assert
         _theaterChain.Theaters.Count.Should().Be(2);
 
         _theaterChain.Theaters.Skip(1).Single().Name.Should().Be("New Theater Name");
         _theaterChain.Theaters.Skip(1).Single().Location.Should().Be("New Location B");
+
+        addedTheater.Name.Should().Be("New Theater Name");
+        addedTheater.Location.Should().Be("New Location B");
     }
 
     [Test]

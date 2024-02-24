@@ -1,11 +1,12 @@
 ﻿using Api.Dtos;
+using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 
 namespace Api.Services
 {
     public class TheaterChainDtoMapperService : ITheaterChainDtoMapperService
     {
-        public MovieDto MapMovieToMovieDto(IMovie movie)
+        public MovieWithIdDto MapMovieToMovieDto(IMovie movie)
         {
             MovieStatus movieStatus = movie.TheaterChainMovieStatus switch
             {
@@ -14,10 +15,16 @@ namespace Api.Services
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            return new MovieDto(movie.Id, movie.Title, movie.Description, movie.DurationMins, movie.Genre, movie.ReleaseDateUtc, movieStatus);
+            return new MovieWithIdDto(movie.Id, movie.Title, movie.Description, movie.DurationMins, movie.Genre, movie.ReleaseDateUtc, movieStatus);
         }
 
-        public IEnumerable<MovieDto> MapMoviesToMoviesDto(List<IMovie> movies)
+        public IEnumerable<MovieWithIdDto> MapMoviesToMoviesWithIdDto(List<IMovie> movies)
             => movies.Select(MapMovieToMovieDto);
+
+        public TheaterWithIdDto MapTheaterToTheaterWithIdDto(ITheater theater)
+            => new(theater.Id, theater.Name, theater.Location);
+
+        public IEnumerable<TheaterWithIdDto> MapTheatersToTheatersWithIdDto(List<ITheater> theaters)
+            => theaters.Select(MapTheaterToTheaterWithIdDto);
     }
 }
