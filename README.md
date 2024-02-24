@@ -16,6 +16,7 @@ Contrary to the crowd, it piqued my interest as a perfect little project to exhi
 - **Test Coverage**: Extensive coverage of the domain business logic via NUnit Tests and Fluent Assertions.
 - **Repository Pattern**: Allowing the business and application logic to be database agnostic.
 - **Cosmos DB**: Cloud based Document Database chosen for scalability.
+- **Open API**: APi documentation (formally called Swagger).
   
 Wip/Future additions
 - **JWT Authentication**
