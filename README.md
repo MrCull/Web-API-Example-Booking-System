@@ -8,11 +8,11 @@ Contrary to the crowd, it piqued my interest as a perfect little project to exhi
 ## Tech Stack, Patterns & Dev practices
 - **.Net 8**: Use the latest (at the time of creation) .Net framework.
 - **C# 12**
-- **Web API**
+- **Web API**: Using Minimal API for enhances performance.
 - **Clean Onion Architecture**
 - **Docker Containers**
 - **Domain Driven Design**
-- **Test Driven Development**: With User Stories as the basis for each Domain level Unit Test
+- **Test Driven Development**: With User Stories as the basis for each Domain level Unit Test.
 - **Test Coverage**: Extensive coverage of the domain business logic via NUnit Tests and Fluent Assertions.
 - **Repository Pattern**: Allowing the business and application logic to be database agnostic.
 - **Cosmos DB**: Cloud based Document Database chosen for scalability.
@@ -20,7 +20,7 @@ Contrary to the crowd, it piqued my interest as a perfect little project to exhi
 Wip/Future additions
 - **JWT Authentication**
 - **CI/CD pipelines**
-- **Cloud based hosting**: With load balancing and elastic scaling
+- **Cloud based hosting**: With load balancing and elastic scaling.
 - **Rate Limit**
 - **.NET Aspire**
 - **Redis database caching**
