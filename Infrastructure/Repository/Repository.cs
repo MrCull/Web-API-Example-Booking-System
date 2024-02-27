@@ -16,7 +16,7 @@ public class Repository<T> : IRepository<T> where T : class, IAggregrateRoot
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
     {
-        await _container.CreateItemAsync(entity, cancellationToken: cancellationToken);
+        await _container.CreateItemAsync(item: entity, partitionKey: new PartitionKey(entity.Id.ToString()), cancellationToken: cancellationToken);
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
