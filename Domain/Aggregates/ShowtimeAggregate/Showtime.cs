@@ -64,8 +64,12 @@ internal class Showtime : IShowtime
         return booking;
     }
 
-    internal List<SeatReservation> GetSeatReservations()
-        => SeatReservations;
+    public int MovieId => Movie.Id;
+
+    public Guid ScreenId => Screen.Id;
+
+    public List<ISeatReservation> GetSeatReservations()
+        => SeatReservations.Select(sr => (ISeatReservation)sr).ToList();
 
     public List<ISeatReservation> GetSeatReservationsBySeatNumbers(List<string> seatsRequired)
     {

@@ -1,10 +1,12 @@
 ﻿using Domain.Aggregates.ShowtimeAggregate;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
 
-internal class Screen(int theaterId, string screenNumber) : IScreen
+public class Screen(int theaterId, string screenNumber) : IScreen
 {
+    [JsonProperty("id")]
     public Guid Id { get; private set; } = Guid.NewGuid();
 
     [Required]
@@ -19,12 +21,17 @@ internal class Screen(int theaterId, string screenNumber) : IScreen
     // Navigation property for showtimes
     internal List<Showtime> Showtimes { get; private set; } = [];
 
+    [JsonProperty("seats")]
     internal List<Seat> Seats { get; private set; } = [];
 
     public void AddSeats(List<string> seatsToAdd)
     {
+        Seats.Clear();
         Seats.AddRange(seatsToAdd.Select(s => new Seat(s)));
     }
+
+    public List<ISeat> GetSeats()
+        => Seats.Select(s => (ISeat)s).ToList();
 
     internal void AddShowtime(Showtime showtime)
     {

@@ -242,7 +242,7 @@ internal class TheaterTests
         Screen screen = _theater.GetScreenByName("1");
         _theater.AddShowtime(DateTime.Now.AddDays(1), 9.99m, screen.Id, _movie.Id);
 
-        Showtime showtime = _theater.GetActiveShowtimes().Single();
+        IShowtime showtime = _theater.GetActiveShowtimes().Single();
 
         // Act
         _theater.RemoveShowtime(showtime.Id);
@@ -397,7 +397,7 @@ internal class TheaterTests
         DateTime futureDateTime = DateTime.Now.AddDays(1);
         _theater.AddShowtime(futureDateTime, 9.99m, screen.Id, _movie.Id);
 
-        Showtime showtime = _theater.GetActiveShowtimes().Single();
+        IShowtime showtime = _theater.GetActiveShowtimes().Single();
 
         DateTime newDateTime = DateTime.Now.AddDays(2);
         decimal newPrice = 19.99m;
@@ -408,10 +408,10 @@ internal class TheaterTests
         _theater.UpdateShowtime(showtime.Id, newDateTime, newPrice, newScreen.Id);
 
         // Assert
-        Showtime updatedShowtime = _theater.GetActiveShowtimes().Single();
+        IShowtime updatedShowtime = _theater.GetActiveShowtimes().Single();
         updatedShowtime.ShowDateTimeUtc.Should().Be(newDateTime);
         updatedShowtime.Price.Should().Be(newPrice);
-        updatedShowtime.Screen.Should().Be(newScreen);
+        updatedShowtime.ScreenId.Should().Be(newScreen.Id);
     }
 
     [Test]
@@ -426,7 +426,7 @@ internal class TheaterTests
         Screen screen = _theater.GetScreenByName("1");
         DateTime futureDateTime = DateTime.Now.AddDays(1);
         _theater.AddShowtime(futureDateTime, 9.99m, screen.Id, _movie.Id);
-        Showtime showtime = _theater.GetActiveShowtimes().Single();
+        IShowtime showtime = _theater.GetActiveShowtimes().Single();
 
         List<string> seats = ["A1", "A2"];
         screen.AddSeats(seats);
@@ -450,7 +450,7 @@ internal class TheaterTests
         Screen screen = _theater.GetScreenByName("1");
         DateTime futureDateTime = DateTime.Now.AddDays(1);
         _theater.AddShowtime(futureDateTime, 9.99m, screen.Id, _movie.Id);
-        Showtime showtime = _theater.GetActiveShowtimes().Single();
+        IShowtime showtime = _theater.GetActiveShowtimes().Single();
 
         List<string> seats = ["A1", "A2"];
         screen.AddSeats(seats);
@@ -509,7 +509,7 @@ internal class TheaterTests
         _theater.Showtimes.Add(new Showtime(3, _movie, screen, DateTime.Now.AddDays(-1), 9.99m));
 
         // Act
-        List<Showtime> showtimes = _theater.GetActiveShowtimes().ToList();
+        List<IShowtime> showtimes = _theater.GetActiveShowtimes().ToList();
 
         // Assert
         showtimes.Count.Should().Be(2);
@@ -531,7 +531,7 @@ internal class TheaterTests
         Screen screen = _theater.GetScreenByName("1");
 
         _theater.AddShowtime(DateTime.Now.AddDays(1), 9.99m, screen.Id, _movie.Id);
-        Showtime showtime = _theater.GetActiveShowtimes().Single();
+        IShowtime showtime = _theater.GetActiveShowtimes().Single();
 
         List<string> seats = ["A1", "A2"];
         screen.AddSeats(seats);

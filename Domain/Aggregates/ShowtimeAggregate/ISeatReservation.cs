@@ -1,4 +1,6 @@
-﻿namespace Domain.Aggregates.ShowtimeAggregate;
+﻿using Domain.Aggregates.TheaterAggregate;
+
+namespace Domain.Aggregates.ShowtimeAggregate;
 
 public interface ISeatReservation
 {
@@ -8,5 +10,7 @@ public interface ISeatReservation
     DateTime ReservationTimeUtc { get; }
     int ShowtimeId { get; }
     ReservationStatus Status { get; }
+
+    List<ISeat> GetSeats();
     internal void SetReservationTimeout(DateTime reservationTimeoutUtc);
 }

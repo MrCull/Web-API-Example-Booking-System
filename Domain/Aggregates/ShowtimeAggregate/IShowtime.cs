@@ -7,7 +7,9 @@
 
         int AvailableSeats();
         IBooking CompleteBookingForSeatReservationAndReturnBooking(Guid reservationId);
-        internal ISeatReservation ProvisionallyReserveSeatsAndReturnReservation(List<string> seatNames);
-
+        int MovieId { get; }
+        Guid ScreenId { get; }
+        ISeatReservation ProvisionallyReserveSeatsAndReturnReservation(List<string> seatNames);
+        List<ISeatReservation> GetSeatReservations();
     }
 }

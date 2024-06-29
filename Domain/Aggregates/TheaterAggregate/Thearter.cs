@@ -1,25 +1,29 @@
 ﻿using Domain.Aggregates.ShowtimeAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 using Domain.Exceptions;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
 
 internal class Theater : ITheater
 {
+    [JsonProperty("id")]
     public int Id { get; private set; }
 
     [Required]
     [StringLength(100, ErrorMessage = "Theater name length can't be more than 100 characters.")]
+    [JsonProperty("name")]
     public string Name { get; private set; }
 
     [Required]
     [StringLength(200, ErrorMessage = "Location length can't be more than 200 characters.")]
+    [JsonProperty("location")]
     public string Location { get; private set; }
 
-    // Navigation property for screens
     internal readonly List<Movie> Movies = [];
 
+    [JsonProperty("screens")]
     internal readonly List<Screen> Screens = [];
 
     internal readonly List<Showtime> Showtimes = [];
@@ -40,7 +44,12 @@ internal class Theater : ITheater
 
     }
 
-    public void AddScreen(string screenNumber)
+    // used in db construction via reflection
+    public Theater()
+    {
+    }
+
+    public IScreen AddScreen(string screenNumber)
     {
         IScreen? existingScreen = Screens.Find(s => s.ScreenNumber == screenNumber);
         if (existingScreen is not null)
@@ -50,9 +59,17 @@ internal class Theater : ITheater
 
         Screen screen = new(Id, screenNumber);
         Screens.Add(screen);
+        return screen;
     }
 
-    public void AddShowtime(DateTime dateTime, decimal price, Guid screenId, int movieId)
+    public IScreen AddScreen(string screenNumber, List<string> seats)
+    {
+        IScreen screen = AddScreen(screenNumber);
+        screen.AddSeats(seats);
+        return screen;
+    }
+
+    public IShowtime AddShowtime(DateTime dateTime, decimal price, Guid screenId, int movieId)
     {
         ValidateInputAndThrowIfInvalid(dateTime, price);
 
@@ -64,6 +81,8 @@ internal class Theater : ITheater
         screen.AddShowtime(showtime);
 
         Showtimes.Add(showtime);
+
+        return showtime;
     }
 
     private void ValidateInputAndThrowIfInvalid(DateTime showDateTimeUtc, decimal price)
@@ -94,9 +113,17 @@ internal class Theater : ITheater
         }
         else
         {
-            throw new TheaterException("Screen does not exist");
+            throw new TheaterException($"Screen with name[{screenName}] does not exist");
         }
     }
+
+    public IScreen? GetScreenById(Guid screenId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<IScreen> GetScreens()
+    => Screens.Select(s => (IScreen)s).ToList();
 
     internal List<Screen> GetActiveScreens()
         => Screens.Where(s => s.IsEnabled).ToList();
@@ -156,7 +183,7 @@ internal class Theater : ITheater
         Location = newLocation;
     }
 
-    public void UpdateScreen(Guid id, string name)
+    public IScreen UpdateScreen(Guid id, string name)
     {
         Screen? screen = Screens.Find(s => s.Id == id);
         if (screen is not null)
@@ -165,14 +192,24 @@ internal class Theater : ITheater
         }
         else
         {
-            throw new TheaterException("Screen does not exist");
+            throw new TheaterException($"Screen with id[{id}] does not exist");
         }
+        return screen;
     }
 
-    internal IEnumerable<Showtime> GetActiveShowtimes()
+    public IScreen UpdateScreen(Guid id, string name, List<string> seats)
+    {
+        if (UpdateScreen(id, name) is not Screen screen) throw new TheaterException($"Screen with id[{id}] does not exist");
+
+        screen.AddSeats(seats);
+
+        return screen;
+    }
+
+
+    public IEnumerable<IShowtime> GetActiveShowtimes()
         => Showtimes.Where(s => s.ShowDateTimeUtc > DateTime.UtcNow).
-        OrderBy(s => s.ShowDateTimeUtc)
-        .ToList();
+        OrderBy(s => s.ShowDateTimeUtc);
 
     public void UpdateShowtime(int id, DateTime newDateTime, decimal newPrice, Guid screenId)
     {
@@ -216,7 +253,12 @@ internal class Theater : ITheater
 
 
     public bool HasMovieGotAnyFutureShowtimes(int id)
-        => GetActiveShowtimes().Any(s => s.Movie?.Id == id);
+        => GetActiveShowtimes().Any(s => s.MovieId == id);
+
+    public IShowtime? GetActiveShowtimeById(int showtimeId)
+    {
+        return GetActiveShowtimes().FirstOrDefault(s => s.Id == showtimeId);
+    }
 }
 
 

@@ -1,6 +1,6 @@
 ﻿namespace Api.Dtos;
-public class TheaterWithIdDto(int id, string name, string location)
-    : TheaterDto(name, location)
+public class TheaterWithIdDto(int id, string name, string location, List<ScreenWithIdDto> screensWithIdDto)
+    : TheaterDto(name, location, screensWithIdDto)
 {
     public int Id { get; set; } = id;
 }

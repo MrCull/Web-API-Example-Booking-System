@@ -38,16 +38,18 @@ internal class ShowtimeTests
         // Assert
         _showtime.AvailableSeats().Should().Be(2);
 
-        List<SeatReservation> seatReservations = _showtime.GetSeatReservations();
+        List<ISeatReservation> seatReservations = _showtime.GetSeatReservations();
         seatReservations.Count.Should().Be(1);
 
         seatReservations[0].Status.Should().Be(ReservationStatus.Reserved);
 
-        seatReservations[0].Seats.Count.Should().Be(3);
+        seatReservations[0].GetSeats().Count.Should().Be(3);
 
-        seatReservations[0].Seats[0].SeatNumber.Should().Be("A1");
-        seatReservations[0].Seats[1].SeatNumber.Should().Be("A2");
-        seatReservations[0].Seats[2].SeatNumber.Should().Be("A3");
+        List<ISeat> seats = seatReservations[0].GetSeats();
+
+        seats[0].SeatNumber.Should().Be("A1");
+        seats[1].SeatNumber.Should().Be("A2");
+        seats[2].SeatNumber.Should().Be("A3");
 
         seatReservations[0].ReservationTimeUtc.Should().BeOnOrAfter(timeBeforeReservationUtc);
         seatReservations[0].ReservationTimeUtc.Should().BeOnOrBefore(DateTime.UtcNow);

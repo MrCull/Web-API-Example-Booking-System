@@ -5,11 +5,15 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{285ED73E-36FA-4A31-8BEB-ED2D5CAE46C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{CB393DE7-BA1F-4C64-8F92-25BBECBA7212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{CB393DE7-BA1F-4C64-8F92-25BBECBA7212}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Test", "Domain.Test\Domain.Test.csproj", "{5FE47495-7547-4151-B47F-6EAB07ECCA8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Test", "Domain.Test\Domain.Test.csproj", "{5FE47495-7547-4151-B47F-6EAB07ECCA8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{5948A4EE-230A-4D42-AFC5-B7D34AE33312}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{5948A4EE-230A-4D42-AFC5-B7D34AE33312}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APITesterApp", "APITesterApp\APITesterApp.csproj", "{2A9D4B1C-7E4F-42ED-B326-EBDDC7EFCCF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIDtos", "APIDtos\APIDtos.csproj", "{B4CD8819-DB87-4AF1-9E20-3BE6736B3A39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{5948A4EE-230A-4D42-AFC5-B7D34AE33312}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5948A4EE-230A-4D42-AFC5-B7D34AE33312}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5948A4EE-230A-4D42-AFC5-B7D34AE33312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A9D4B1C-7E4F-42ED-B326-EBDDC7EFCCF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A9D4B1C-7E4F-42ED-B326-EBDDC7EFCCF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A9D4B1C-7E4F-42ED-B326-EBDDC7EFCCF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A9D4B1C-7E4F-42ED-B326-EBDDC7EFCCF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4CD8819-DB87-4AF1-9E20-3BE6736B3A39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4CD8819-DB87-4AF1-9E20-3BE6736B3A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4CD8819-DB87-4AF1-9E20-3BE6736B3A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4CD8819-DB87-4AF1-9E20-3BE6736B3A39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

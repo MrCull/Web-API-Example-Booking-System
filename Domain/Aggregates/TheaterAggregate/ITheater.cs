@@ -1,17 +1,26 @@
-﻿namespace Domain.Aggregates.TheaterAggregate
+﻿
+using Domain.Aggregates.ShowtimeAggregate;
+
+namespace Domain.Aggregates.TheaterAggregate
 {
     public interface ITheater : IAggregrateRoot
     {
         string Location { get; }
         string Name { get; }
 
-        void AddScreen(string screenNumber);
-        void AddShowtime(DateTime dateTime, decimal price, Guid screenId, int movieId);
+        IScreen AddScreen(string screenNumber);
+        IScreen AddScreen(string screenNumber, List<string> seats);
+        IShowtime AddShowtime(DateTime dateTime, decimal price, Guid screenId, int movieId);
         void DisableScreen(Guid screenId);
+        IShowtime? GetActiveShowtimeById(int showtimeId);
+        IEnumerable<IShowtime> GetActiveShowtimes();
+        //        IEnumerable<Showtime> GetActiveShowtimes();
+        IScreen? GetScreenById(Guid screenId);
+        List<IScreen> GetScreens();
         void ReenableScreen(Guid id);
         void RemoveShowtime(int id);
         void UpdateInformation(string newName, string newLocation);
-        void UpdateScreen(Guid id, string name);
+        IScreen UpdateScreen(Guid id, string name, List<string> seats);
         void UpdateShowtime(int id, DateTime newDateTime, decimal newPrice, Guid screenId);
     }
 }

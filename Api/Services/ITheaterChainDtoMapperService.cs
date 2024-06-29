@@ -1,4 +1,5 @@
 ﻿using Api.Dtos;
+using Domain.Aggregates.ShowtimeAggregate;
 using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 
@@ -11,4 +12,6 @@ public interface ITheaterChainDtoMapperService
 
     TheaterWithIdDto MapTheaterToTheaterWithIdDto(ITheater theater);
     IEnumerable<TheaterWithIdDto> MapTheatersToTheatersWithIdDto(List<ITheater> theaters);
+    ScreenWithIdDto MapScreenToScreenWithIdDto(IScreen screen);
+    ShowtimeWithIdDto MapShowtimeToShowtimeWithIdDto(IShowtime showtime);
 }

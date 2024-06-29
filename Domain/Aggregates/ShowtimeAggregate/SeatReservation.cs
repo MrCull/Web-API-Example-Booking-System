@@ -37,6 +37,9 @@ internal class SeatReservation : ISeatReservation
 
     internal List<Seat> Seats { get; private set; }
 
+    public List<ISeat> GetSeats()
+        => Seats.Select(s => (ISeat)s).ToList();
+
     internal void Confirm()
     {
         Status = ReservationStatus.Confirmed;

@@ -9,5 +9,6 @@ namespace Domain.Aggregates.TheaterAggregate
         int TheaterId { get; }
 
         void AddSeats(List<string> seatsToAdd);
+        List<ISeat> GetSeats();
     }
 }

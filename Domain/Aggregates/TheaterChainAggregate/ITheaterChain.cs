@@ -4,6 +4,8 @@ namespace Domain.Aggregates.TheaterChainAggregate;
 
 public interface ITheaterChain : IAggregrateRoot
 {
+    string IdString { get; }
+
     string Description { get; }
     string Name { get; }
 

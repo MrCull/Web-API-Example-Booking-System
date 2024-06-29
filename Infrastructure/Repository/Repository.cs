@@ -1,9 +1,9 @@
-﻿using Domain.Aggregates;
+﻿using Domain.Aggregates.TheaterChainAggregate;
 using Microsoft.Azure.Cosmos;
 
 namespace Infrastructure.Repository;
 
-public class Repository<T> : IRepository<T> where T : class, IAggregrateRoot
+public class Repository : IRepository
 {
     private readonly Container _container;
 
@@ -14,14 +14,14 @@ public class Repository<T> : IRepository<T> where T : class, IAggregrateRoot
         _container = containerResponse.Container;
     }
 
-    public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(TheaterChain entity, CancellationToken cancellationToken = default)
     {
         await _container.CreateItemAsync(item: entity, partitionKey: new PartitionKey(entity.Id.ToString()), cancellationToken: cancellationToken);
     }
 
-    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(TheaterChain entity, CancellationToken cancellationToken = default)
     {
-        T? aggregateRoot = await GetByIdAsync(entity.Id, cancellationToken);
+        TheaterChain? aggregateRoot = await GetByIdAsync(entity.Id, cancellationToken);
 
         if (aggregateRoot is null)
         {
@@ -31,16 +31,16 @@ public class Repository<T> : IRepository<T> where T : class, IAggregrateRoot
         await _container.UpsertItemAsync(entity, new PartitionKey(entity.Id.ToString()), cancellationToken: cancellationToken);
     }
 
-    public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(TheaterChain entity, CancellationToken cancellationToken = default)
     {
-        await _container.DeleteItemAsync<T>(entity.Id.ToString(), new PartitionKey(entity.Id.ToString()), cancellationToken: cancellationToken);
+        await _container.DeleteItemAsync<TheaterChain>(entity.Id.ToString(), new PartitionKey(entity.Id.ToString()), cancellationToken: cancellationToken);
     }
 
-    public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<TheaterChain?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         try
         {
-            return await _container.ReadItemAsync<T>(id.ToString(), new PartitionKey(id.ToString()), cancellationToken: cancellationToken);
+            return await _container.ReadItemAsync<TheaterChain>(id.ToString(), new PartitionKey(id.ToString()), cancellationToken: cancellationToken);
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {

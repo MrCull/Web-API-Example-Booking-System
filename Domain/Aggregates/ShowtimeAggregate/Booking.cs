@@ -2,17 +2,17 @@
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-internal record Booking(Guid id, DateTime bookingTimeUtc, IShowtime showtime, ISeatReservation seatReservation) : IBooking
+internal record Booking(Guid Id, DateTime BookingTimeUtc, IShowtime Showtime, ISeatReservation SeatReservation) : IBooking
 {
     [Required]
-    public Guid Id { get; private set; } = id;
+    public Guid Id { get; private set; } = Id;
 
-    public DateTime BookingTimeUtc { get; private set; } = bookingTimeUtc;
+    public DateTime BookingTimeUtc { get; private set; } = BookingTimeUtc;
 
     // Navigation properties
-    public IShowtime Showtime { get; private set; } = showtime;
+    public IShowtime Showtime { get; private set; } = Showtime;
 
-    public ISeatReservation SeatReservation { get; private set; } = seatReservation;
+    public ISeatReservation SeatReservation { get; private set; } = SeatReservation;
 }
 
 

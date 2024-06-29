@@ -1,6 +1,7 @@
 ﻿using Domain.Aggregates.ShowtimeAggregate;
 using Domain.Aggregates.TheaterAggregate;
 using Domain.Exceptions;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
@@ -8,6 +9,9 @@ namespace Domain.Aggregates.TheaterChainAggregate;
 public class TheaterChain : ITheaterChain
 {
     public int Id { get; private set; }
+
+    [JsonProperty("id")]
+    public string IdString => Id.ToString();
 
     [Required]
     [StringLength(100, ErrorMessage = "Theater chain name length can't be more than 100 characters.")]
@@ -18,7 +22,9 @@ public class TheaterChain : ITheaterChain
     public string Description { get; private set; }
 
     // Navigation properties
+    [JsonProperty]
     internal List<Theater> Theaters { get; private set; }
+    [JsonProperty]
     internal List<Movie> Movies { get; private set; }
 
     public TheaterChain(int id, string name, string description)
@@ -66,7 +72,9 @@ public class TheaterChain : ITheaterChain
             throw new MovieChainException("Theater already exists");
         }
 
-        Theater theater = new(0, name, location, Movies);
+        int id = Theaters.Count != 0 ? Theaters.Max(t => t.Id) + 1 : 1;
+
+        Theater theater = new(id, name, location, Movies);
         Theaters.Add(theater);
         return theater;
     }
@@ -111,7 +119,7 @@ public class TheaterChain : ITheaterChain
 
     public IMovie AddMovie(string title, string description, string genre, int durationMins, DateTime releaseDateUtc)
     {
-        int id = Movies.Any() ? Movies.Max(m => m.Id) + 1 : 1;
+        int id = Movies.Count != 0 ? Movies.Max(m => m.Id) + 1 : 1;
 
         Movie movie = new(id, title, description, durationMins, genre, releaseDateUtc);
         Movies.Add(movie);

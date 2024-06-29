@@ -1,4 +1,5 @@
-﻿
+﻿using Domain.Aggregates.TheaterChainAggregate;
+
 namespace Infrastructure.Repository;
 
 
@@ -8,10 +9,10 @@ namespace Infrastructure.Repository;
 /// </para>
 /// </summary>
 /// <typeparam name="T">The type of entity being operated on by this repository.</typeparam>
-public interface IRepository<T> where T : class
+public interface IRepository
 {
-    Task AddAsync(T entity, CancellationToken cancellationToken = default);
-    Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
-    Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
+    Task AddAsync(TheaterChain entity, CancellationToken cancellationToken = default);
+    Task DeleteAsync(TheaterChain entity, CancellationToken cancellationToken = default);
+    Task<TheaterChain?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task UpdateAsync(TheaterChain entity, CancellationToken cancellationToken = default);
 }
