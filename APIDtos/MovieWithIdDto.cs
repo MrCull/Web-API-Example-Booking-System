@@ -1,4 +1,4 @@
-﻿namespace Api.Dtos;
+﻿namespace APIDtos;
 
 public record MovieWithIdDto : MovieDto
 {

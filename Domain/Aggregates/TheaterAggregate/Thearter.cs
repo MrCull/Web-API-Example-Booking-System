@@ -26,6 +26,7 @@ internal class Theater : ITheater
     [JsonProperty("screens")]
     internal readonly List<Screen> Screens = [];
 
+    [JsonProperty("showtimes")]
     internal readonly List<Showtime> Showtimes = [];
 
     internal Theater(int id, string name, string location, List<Movie> movies, List<Screen> screens, List<Showtime> showtimes)
@@ -71,12 +72,13 @@ internal class Theater : ITheater
 
     public IShowtime AddShowtime(DateTime dateTime, decimal price, Guid screenId, int movieId)
     {
-        ValidateInputAndThrowIfInvalid(dateTime, price);
-
         Movie? movie = Movies.Find(m => m.Id == movieId);
         Screen? screen = Screens.Find(s => s.Id == screenId);
 
-        Showtime showtime = new(0, movie, screen, dateTime, price);
+        ValidateInputAndThrowIfInvalid(dateTime, price);
+
+        int nextId = Showtimes.Count != 0 ? Showtimes.Max(s => s.Id) + 1 : 1;
+        Showtime showtime = new(nextId, movie, screen, dateTime, price);
 
         screen.AddShowtime(showtime);
 
@@ -258,6 +260,34 @@ internal class Theater : ITheater
     public IShowtime? GetActiveShowtimeById(int showtimeId)
     {
         return GetActiveShowtimes().FirstOrDefault(s => s.Id == showtimeId);
+    }
+
+    public void Initialize(List<Movie> movies)
+    {
+        Movies.Clear();
+        Movies.AddRange(movies);
+
+        foreach (Showtime showtime in Showtimes)
+        {
+            Movie? movie = Movies.Find(m => m.Id == showtime.MovieId);
+            if (movie is null) throw new TheaterException($"Movie[{showtime.MovieId}] does not exist");
+            showtime.SetMovie(movie);
+
+            Screen? screen = Screens.Find(s => s.Id == showtime.ScreenId);
+            if (screen is null) throw new TheaterException($"Screen[{showtime.ScreenId}] does not exist");
+            showtime.SetScreen(screen);
+            screen.AddShowtime(showtime);
+
+            foreach (ISeatReservation seatReservation in showtime.SeatReservations)
+            {
+                seatReservation.SetShowtime(showtime);
+            }
+
+            foreach (IBooking booking in showtime.Bookings)
+            {
+                booking.SetShowtime(showtime);
+            }
+        }
     }
 }
 

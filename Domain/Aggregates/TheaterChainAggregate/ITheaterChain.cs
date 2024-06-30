@@ -12,7 +12,6 @@ public interface ITheaterChain : IAggregrateRoot
     IMovie AddMovie(string title, string description, string genre, int durationMins, DateTime releaseDateUtc);
     ITheater AddTheater(string name, string location);
     IMovie GetMovieById(int id);
-    List<IMovie> GetMovies();
     ITheater? GetTheaterById(int id);
     List<ITheater> GetTheaters();
     void MarkMovieAsAvailable(int id);

@@ -1,6 +1,6 @@
 using Api;
-using Api.Dtos;
 using Api.Services;
+using APIDtos;
 using Domain.Aggregates.ShowtimeAggregate;
 using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
@@ -160,7 +160,7 @@ app.MapPost("/api/v1/theater-chains/{chainId}/movies", async
 });
 
 // Update Movie in chain
-app.MapPut("/api/v1/theater-chains/{chainId}/movies/{id}", async
+app.MapPut("/api/v1/theater-chains/{chainId}/movies/{movieId}", async
     (ITheaterChainDtoMapperService mapperService, IRepository theaterChainRepository, CancellationToken cancellationToken,
     int chainId, int movieId, MovieWithIdDto movieWithIdDto) =>
 {
@@ -314,7 +314,7 @@ app.MapPut("/api/v1/theater-chains/{chainId}/theaters/{theaterId}", async
 // Add a Screen to a Theater
 app.MapPost("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens", async
                 (ITheaterChainDtoMapperService mapperService, IRepository theaterChainRepository, CancellationToken cancellationToken,
-                                              int chainId, int theaterId, ScreenWithIdDto screenDto) =>
+                                              int chainId, int theaterId, ScreenDto screenDto) =>
 {
     TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
     if (theaterChain is null) return Results.NotFound($"Theater chain[{chainId}] not found.");
@@ -422,7 +422,7 @@ app.MapGet("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{scree
 
 // Make a reservation for a showtime
 app.MapPost("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{screenId}/showtimes/{showtimeId}/reservations", async
-                               (IRepository theaterChainRepository, CancellationToken cancellationToken,
+                               (IRepository theaterChainRepository, CancellationToken cancellationToken, ITheaterChainDtoMapperService mapperService,
            int chainId, int theaterId, Guid screenId, int showtimeId, SeatReservationDto reservationDto) =>
 {
     TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
@@ -435,6 +435,8 @@ app.MapPost("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{scre
     if (showtime is null) return Results.NotFound($"Showtime[{showtimeId}] not found in theater[{theaterId}].");
 
     ISeatReservation reservation = showtime.ProvisionallyReserveSeatsAndReturnReservation(reservationDto.Seats);
+
+    SeatReservationWithIdDto reservationWithIdDto = mapperService.MapSeatReservationToSeatReservationWithIdDto(reservation);
 
     await theaterChainRepository.UpdateAsync(theaterChain, cancellationToken);
 

@@ -7,5 +7,7 @@ namespace Domain.Aggregates.ShowtimeAggregate
         Guid Id { get; }
         ISeatReservation SeatReservation { get; }
         IShowtime Showtime { get; }
+
+        void SetShowtime(IShowtime showtime);
     }
 }

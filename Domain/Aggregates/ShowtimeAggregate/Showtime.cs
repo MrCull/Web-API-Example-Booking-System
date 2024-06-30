@@ -1,6 +1,7 @@
 ﻿using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 using Domain.Exceptions;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.ShowtimeAggregate;
@@ -10,9 +11,12 @@ internal class Showtime : IShowtime
     public Showtime(int id, Movie movie, Screen screen, DateTime showDateTimeUtc, decimal price)
     {
         Id = id;
+        ArgumentNullException.ThrowIfNull(movie);
         Movie = movie;
+        MovieId = movie.Id;
         ArgumentNullException.ThrowIfNull(screen);
         Screen = screen;
+        ScreenId = screen.Id;
         Price = price;
 
         ShowDateTimeUtc = showDateTimeUtc;
@@ -20,7 +24,22 @@ internal class Showtime : IShowtime
         Bookings = [];
     }
 
+    [Newtonsoft.Json.JsonConstructor]
+    public Showtime(int id, int movieId, Guid screenId, DateTime showDateTimeUtc, decimal price)
+    {
+        Id = id;
+        MovieId = movieId;
+        ScreenId = screenId;
+        ShowDateTimeUtc = showDateTimeUtc;
+        Price = price;
+        SeatReservations = [];
+        Bookings = [];
+    }
+
     public int Id { get; private set; }
+    public int MovieId { get; private set; }
+    public Guid ScreenId { get; private set; }
+
 
     [Required]
     public DateTime ShowDateTimeUtc { get; private set; }
@@ -35,8 +54,11 @@ internal class Showtime : IShowtime
     // Navigation properties
     internal Movie Movie { get; private set; }
     internal Screen Screen { get; private set; }
-    internal List<SeatReservation> SeatReservations { get; private set; }
-    internal List<Booking> Bookings { get; private set; }
+
+    [JsonProperty("seatReservations")]
+    public List<SeatReservation> SeatReservations { get; private set; }
+
+    public List<Booking> Bookings { get; private set; }
 
     public IBooking CompleteBookingForSeatReservationAndReturnBooking(Guid reservationId)
     {
@@ -63,10 +85,6 @@ internal class Showtime : IShowtime
 
         return booking;
     }
-
-    public int MovieId => Movie.Id;
-
-    public Guid ScreenId => Screen.Id;
 
     public List<ISeatReservation> GetSeatReservations()
         => SeatReservations.Select(sr => (ISeatReservation)sr).ToList();
@@ -115,6 +133,16 @@ internal class Showtime : IShowtime
     {
         ShowDateTimeUtc = newDateTime;
         Price = newPrice;
+        Screen = screen;
+    }
+
+    internal void SetMovie(Movie movie)
+    {
+        Movie = movie;
+    }
+
+    internal void SetScreen(Screen screen)
+    {
         Screen = screen;
     }
 }

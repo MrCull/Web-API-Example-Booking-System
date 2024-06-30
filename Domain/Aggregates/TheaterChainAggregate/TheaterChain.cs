@@ -24,8 +24,9 @@ public class TheaterChain : ITheaterChain
     // Navigation properties
     [JsonProperty]
     internal List<Theater> Theaters { get; private set; }
+
     [JsonProperty]
-    internal List<Movie> Movies { get; private set; }
+    public List<Movie> Movies { get; private set; }
 
     public TheaterChain(int id, string name, string description)
     {
@@ -52,7 +53,7 @@ public class TheaterChain : ITheaterChain
 
     public ITheater? GetTheaterById(int id)
     {
-        ITheater? theater = Theaters.Find(t => t.Id == id);
+        Theater? theater = Theaters.Find(t => t.Id == id);
         if (theater == null) throw new MovieChainException($"Theater with id [{id}] does not exist");
 
         return theater;

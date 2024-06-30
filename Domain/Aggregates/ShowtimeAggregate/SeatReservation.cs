@@ -13,7 +13,6 @@ internal class SeatReservation : ISeatReservation
         Status = ReservationStatus.Reserved;
         Showtime = showtime;
         Seats = seats;
-        Price = Showtime.Price;
     }
 
     public Guid Id { get; private set; }
@@ -58,6 +57,12 @@ internal class SeatReservation : ISeatReservation
     public void SetReservationTimeout(DateTime reservationTimeoutUtc)
     {
         ReservationTimeoutUtc = reservationTimeoutUtc;
+    }
+
+    public void SetShowtime(IShowtime showtime)
+    {
+        Showtime = showtime;
+        Price = Showtime.Price * Seats.Count;
     }
 }
 

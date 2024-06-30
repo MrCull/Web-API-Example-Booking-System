@@ -13,6 +13,11 @@ internal record Booking(Guid Id, DateTime BookingTimeUtc, IShowtime Showtime, IS
     public IShowtime Showtime { get; private set; } = Showtime;
 
     public ISeatReservation SeatReservation { get; private set; } = SeatReservation;
+
+    public void SetShowtime(IShowtime showtime)
+    {
+        Showtime = showtime;
+    }
 }
 
 

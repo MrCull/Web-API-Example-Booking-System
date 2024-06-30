@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Aggregates.TheaterChainAggregate;
 
-internal class Movie : IMovie
+public class Movie : IMovie
 {
     [JsonConstructor]
     public Movie(int id, string title, string description, int durationMins, string genre, DateTime releaseDateUtc, TheaterChainMovieStatus movieStatus = TheaterChainMovieStatus.Available)

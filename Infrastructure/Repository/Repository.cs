@@ -1,4 +1,5 @@
-﻿using Domain.Aggregates.TheaterChainAggregate;
+﻿using Domain.Aggregates.TheaterAggregate;
+using Domain.Aggregates.TheaterChainAggregate;
 using Microsoft.Azure.Cosmos;
 
 namespace Infrastructure.Repository;
@@ -38,13 +39,23 @@ public class Repository : IRepository
 
     public async Task<TheaterChain?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
+        TheaterChain? theaterChain;
         try
         {
-            return await _container.ReadItemAsync<TheaterChain>(id.ToString(), new PartitionKey(id.ToString()), cancellationToken: cancellationToken);
+            theaterChain = await _container.ReadItemAsync<TheaterChain>(id.ToString(), new PartitionKey(id.ToString()), cancellationToken: cancellationToken);
+
+            // Iterate over each theater and its showtimes to assign movies
+            foreach (Theater theater in theaterChain.Theaters)
+            {
+                theater.Initialize(theaterChain.Movies);
+            }
+
         }
         catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
             return null;
         }
+
+        return theaterChain;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Api.Dtos;
+﻿using APIDtos;
 using Domain.Aggregates.ShowtimeAggregate;
 using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
@@ -73,8 +73,29 @@ namespace Api.Services
             return new(showtime.Id, showtime.MovieId, showtime.ScreenId, showtime.ShowDateTimeUtc, showtime.Price);
         }
 
+        #endregion Showtimes
+
+        #region SeatReservations
+
+        public SeatReservationWithIdDto MapSeatReservationToSeatReservationWithIdDto(ISeatReservation reservation)
+        {
+            SeatReservationWithIdDto.SeatReservationStatus reservationStatus = reservation.Status switch
+            {
+                ReservationStatus.Reserved => SeatReservationWithIdDto.SeatReservationStatus.Provisional,
+                ReservationStatus.Confirmed => SeatReservationWithIdDto.SeatReservationStatus.Confirmed,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            return new(reservation.Id, reservation.GetSeats().Select(s => s.SeatNumber).ToList(), reservation.ShowtimeId, reservation.ReservationTimeoutUtc, reservationStatus);
+        }
+
+        public BookingDto MapBookingToBookingDto(IBooking booking)
+        {
+            return new(booking.Id, booking.BookingTimeUtc, MapShowtimeToShowtimeWithIdDto(booking.Showtime), MapSeatReservationToSeatReservationWithIdDto(booking.SeatReservation));
+        }
+
+        #endregion SeatReservations
 
 
-        #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Api.Dtos;
+﻿namespace APIDtos;
 
 public record TheaterChainDto
 {
@@ -12,4 +12,9 @@ public record TheaterChainDto
     public int Id { get; }
     public string Name { get; set; }
     public string Description { get; set; }
+
+    public override string ToString()
+    {
+        return $"Id: {Id}, Name: {Name}, Description: {Description}";
+    }
 }
