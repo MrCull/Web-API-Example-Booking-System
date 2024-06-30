@@ -34,7 +34,7 @@ If you have any feedback or wish to discuss any aspect of this project, please f
 Feel free to submit Issues or Pull Requests with any suggestions.
 
 
-## Instructions to run the project
+# Instructions to run the project
 
 $env:AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE = "127.0.0.1"
 # Now run your command to start the Cosmos DB Emulator
@@ -43,4 +43,7 @@ docker pull mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
 
 docker run --publish 8081:8081 --publish 10250-10255:10250-10255 --interactive --tty -e AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=127.0.0.1 mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
 
+# Now navigate to this url https://localhost:8081/_explorer/index.html
+# Export the Cosmos DB certificate to file
+# Then open crt file and install to your Trusted Root Certificate Authorities folder
 
