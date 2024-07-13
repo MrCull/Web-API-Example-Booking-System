@@ -1,4 +1,4 @@
-# Cinema Ticket Booking System Web API - An example in Modern Software Web API project
+# Cinema Ticket Booking System Web API - An example Web API project
 
 I chanced upon a debate on Reddit concerning a take-home project that many deemed overly ambitious:
 - https://www.reddit.com/r/dotnet/comments/1841x0f/does_this_takehome_project_look_okay/
@@ -17,14 +17,14 @@ Contrary to the crowd, it piqued my interest as a perfect little project to exhi
 - **Repository Pattern**: Allowing the business and application logic to be database agnostic.
 - **Cosmos DB**: Cloud based Document Database chosen for scalability.
 - **Open API**: Auto API documentation (formally called Swagger).
+- **Redis caching**: Fase in-memory caching.
+- **.NET Aspire**: An opinionated, cloud ready stack for building observable, production ready, distributed applications. 
   
 Wip/Future additions
 - **JWT Authentication**
 - **CI/CD pipelines**
 - **Cloud based hosting**: With load balancing and elastic scaling.
 - **Rate Limit**
-- **.NET Aspire**
-- **Redis database caching**
 
 
 ## Contributions?
@@ -36,14 +36,27 @@ Feel free to submit Issues or Pull Requests with any suggestions.
 
 # Instructions to run the project
 
-$env:AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE = "127.0.0.1"
-# Now run your command to start the Cosmos DB Emulator
+Set Startup Project to be AsipreApp.AppHost
+Run the solution.
 
-docker pull mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+In the Aspire Window click on "cosmos -  Details" 
+Then take the port number from "emulator target port":
+![image](https://github.com/user-attachments/assets/629201ae-a1fe-4c54-b517-a43c4f2d96da)
 
-docker run --publish 8081:8081 --publish 10250-10255:10250-10255 --interactive --tty -e AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=127.0.0.1 mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+Now navigate to this url where [portnumber] is replaced with the port from above: https://localhost:[portnumber]/_explorer/index.html
+Note: CosmodDB emulator usually takes a few mins to start up. So retry untill you see the "Azure Cosmos DB Emulator" page.
 
-# Now navigate to this url https://localhost:8081/_explorer/index.html
-# Export the Cosmos DB certificate to file
-# Then open crt file and install to your Trusted Root Certificate Authorities folder
+There will be a certification error form the selfsigned certificate.
+Export the Cosmos DB certificate and save to a local file.
+Then open crt file and install to your Trusted Root Certificate Authorities folder "on this pc".
+
+# API Endpoints
+
+From the Aspire page follow the URL to get to the Open API documentation
+![image](https://github.com/user-attachments/assets/bdd4ae4c-4ffc-4499-bce4-aa1c1f3e7876)
+
+From here you eill be able to see and access the complete suite of API end points:
+![image](https://github.com/user-attachments/assets/26efe814-f555-4999-b60e-41ac6b214c30)
+
+
 
