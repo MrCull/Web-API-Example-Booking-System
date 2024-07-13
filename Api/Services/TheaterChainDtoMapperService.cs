@@ -91,7 +91,7 @@ namespace Api.Services
 
         public BookingDto MapBookingToBookingDto(IBooking booking)
         {
-            return new(booking.Id, booking.BookingTimeUtc, MapShowtimeToShowtimeWithIdDto(booking.Showtime), MapSeatReservationToSeatReservationWithIdDto(booking.SeatReservation));
+            return new(booking.Id, booking.BookingTimeUtc, MapSeatReservationToSeatReservationWithIdDto(booking.SeatReservation));
         }
 
         #endregion SeatReservations

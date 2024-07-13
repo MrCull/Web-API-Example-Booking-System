@@ -80,7 +80,7 @@ internal class Showtime : IShowtime
 
         seatReservation.Confirm();
 
-        Booking booking = new(Guid.NewGuid(), DateTime.UtcNow, this, seatReservation);
+        Booking booking = new(Guid.NewGuid(), DateTime.UtcNow, seatReservation);
         Bookings.Add(booking);
 
         return booking;
@@ -124,6 +124,7 @@ internal class Showtime : IShowtime
         ShowDateTimeUtc = newDateTime;
         Price = newPrice;
         Screen = screen;
+        ScreenId = screen.Id;
     }
 
     internal void SetMovie(Movie movie)

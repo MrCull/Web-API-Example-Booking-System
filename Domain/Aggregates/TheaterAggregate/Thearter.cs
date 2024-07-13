@@ -80,8 +80,6 @@ internal class Theater : ITheater
         int nextId = Showtimes.Count != 0 ? Showtimes.Max(s => s.Id) + 1 : 1;
         Showtime showtime = new(nextId, movie, screen, dateTime, price);
 
-        screen.AddShowtime(showtime);
-
         Showtimes.Add(showtime);
 
         return showtime;
@@ -148,7 +146,8 @@ internal class Theater : ITheater
         Screen? screen = Screens.Find(s => s.Id == screenId);
         if (screen is not null)
         {
-            if (screen.HasFutureShowtimes())
+            IEnumerable<Showtime> futureShowtimes = Showtimes.Where(s => s.ScreenId == screenId && s.ShowDateTimeUtc > DateTime.UtcNow);
+            if (futureShowtimes.Any())
             {
                 throw new TheaterException("Screen has future showtimes");
             }
@@ -276,16 +275,10 @@ internal class Theater : ITheater
             Screen? screen = Screens.Find(s => s.Id == showtime.ScreenId);
             if (screen is null) throw new TheaterException($"Screen[{showtime.ScreenId}] does not exist");
             showtime.SetScreen(screen);
-            screen.AddShowtime(showtime);
 
             foreach (ISeatReservation seatReservation in showtime.SeatReservations)
             {
                 seatReservation.SetShowtime(showtime);
-            }
-
-            foreach (IBooking booking in showtime.Bookings)
-            {
-                booking.SetShowtime(showtime);
             }
         }
     }

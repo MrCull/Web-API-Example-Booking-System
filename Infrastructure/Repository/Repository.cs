@@ -1,6 +1,7 @@
 ﻿using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 using Microsoft.Azure.Cosmos;
+using Newtonsoft.Json;
 
 namespace Infrastructure.Repository;
 
@@ -13,6 +14,11 @@ public class Repository : IRepository
         DatabaseResponse database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
         ContainerResponse containerResponse = database.Database.CreateContainerIfNotExistsAsync(containerName, "/id").GetAwaiter().GetResult();
         _container = containerResponse.Container;
+
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
     }
 
     public async Task AddAsync(TheaterChain entity, CancellationToken cancellationToken = default)

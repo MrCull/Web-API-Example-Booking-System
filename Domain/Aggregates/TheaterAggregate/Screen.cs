@@ -1,5 +1,4 @@
-﻿using Domain.Aggregates.ShowtimeAggregate;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Aggregates.TheaterAggregate;
@@ -18,9 +17,6 @@ public class Screen(int theaterId, string screenNumber) : IScreen
 
     public bool IsEnabled { get; private set; } = true;
 
-    // Navigation property for showtimes
-    internal List<Showtime> Showtimes { get; private set; } = [];
-
     [JsonProperty("seats")]
     internal List<Seat> Seats { get; private set; } = [];
 
@@ -33,11 +29,6 @@ public class Screen(int theaterId, string screenNumber) : IScreen
     public List<ISeat> GetSeats()
         => Seats.Select(s => (ISeat)s).ToList();
 
-    internal void AddShowtime(Showtime showtime)
-    {
-        Showtimes.Add(showtime);
-    }
-
     internal void Disable()
     {
         IsEnabled = false;
@@ -46,9 +37,6 @@ public class Screen(int theaterId, string screenNumber) : IScreen
     internal List<Seat> GetSeatsByNames(List<string> seatNames)
         => Seats.Where(s => seatNames.Contains(s.SeatNumber))
             .ToList();
-
-    internal bool HasFutureShowtimes()
-        => Showtimes?.Any(s => s.ShowDateTimeUtc > DateTime.UtcNow) ?? false;
 
     internal void Reenable()
     {

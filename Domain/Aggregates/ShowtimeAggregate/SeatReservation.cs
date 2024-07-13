@@ -5,7 +5,7 @@ namespace Domain.Aggregates.ShowtimeAggregate;
 
 internal class SeatReservation : ISeatReservation
 {
-    public SeatReservation(Guid id, DateTime reservationTimeUtc, DateTime reservationTimeoutUtc, Showtime showtime, List<Seat> seats)
+    public SeatReservation(Guid id, DateTime reservationTimeUtc, DateTime? reservationTimeoutUtc, Showtime showtime, List<Seat> seats)
     {
         Id = id;
         ReservationTimeUtc = reservationTimeUtc;
@@ -30,9 +30,6 @@ internal class SeatReservation : ISeatReservation
 
     [Required]
     public ReservationStatus Status { get; private set; }
-
-    // Navigation properties
-    internal IShowtime Showtime { get; private set; }
 
     public List<Seat> Seats { get; private set; }
 
@@ -60,7 +57,6 @@ internal class SeatReservation : ISeatReservation
     {
         if (showtime is not null)
         {
-            Showtime = showtime;
             ShowtimeId = showtime.Id;
             Price = showtime.Price * Seats.Count;
         }

@@ -5,10 +5,8 @@ using Domain.Aggregates.ShowtimeAggregate;
 using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 using Infrastructure.Repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Azure.Cosmos;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -17,22 +15,28 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<CosmosClient>(serviceProvider =>
-{
-    return new CosmosClient(
-        accountEndpoint: "https://localhost:8081/",
-        // Below is the common key that is used for all local Cosmos DB Emulator instances.
-        // This is hardcoded because it is not a secret and is only used for local development.
-        // https://learn.microsoft.com/en-us/azure/cosmos-db/emulator
-        authKeyOrResourceToken: "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
-    );
-});
+builder.AddAzureCosmosClient("cosmos");
+
 
 builder.Services.AddScoped<IRepository>(serviceProvider =>
 {
     CosmosClient cosmosClient = serviceProvider.GetRequiredService<CosmosClient>();
     return new Repository(cosmosClient, "TheaterChainDB", "TheaterChain");
 });
+
+const string Expire60Seconds = "Expire60Seconds";
+
+builder.AddRedisOutputCache("cache");
+builder.Services.AddOutputCache(options =>
+{
+    options.AddBasePolicy(builder =>
+        builder.Expire(TimeSpan.FromSeconds(10)));
+    options.AddPolicy(Expire60Seconds, builder =>
+        builder.Expire(TimeSpan.FromSeconds(60)));
+});
+
+
+builder.Services.AddProblemDetails();
 
 string? JwtKey = builder.Configuration["Jwt:Key"];
 string? JwtIssuer = builder.Configuration["Jwt:Issuer"];
@@ -42,36 +46,6 @@ if (string.IsNullOrEmpty(JwtKey) || string.IsNullOrEmpty(JwtIssuer) || string.Is
 {
     throw new Exception("Jwt:Key, Jwt:Issuer, and Jwt:Audience must be set in appsettings.json");
 }
-
-
-// Configure JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = JwtAudience,
-            ValidAudience = JwtAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey))
-        };
-    });
-
-
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminOnly", policy => policy.RequireClaim("Role", "Admin"))
-    .AddDefaultPolicy("RequireAuthenticatedUser", policy => policy.RequireAuthenticatedUser());
-
-//.AddDefaultPolicy
-//  .AddDefaultPolicy(policy =>
-//  {
-//      policy.RequireAuthenticatedUser();
-//  });
-
-
 
 // local services
 builder.Services.AddSingleton<ITheaterChainDtoMapperService, TheaterChainDtoMapperService>();
@@ -90,6 +64,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseOutputCache();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
@@ -256,7 +232,7 @@ app.MapGet("/api/v1/theater-chains/{chainId}/theaters", async
 });
 
 // Get Theater by ID for chain
-app.MapGet("/api/v1/theater-chains/{chainId}/theaters/{theaterId}", async
+app.MapGet("/api/v1/theater-chains/{chainId}/theaters/{theaterId}", [OutputCache] async
        (ITheaterChainDtoMapperService mapperService, IRepository theaterChainRepository, CancellationToken cancellationToken,
           int chainId, int theaterId) =>
 {
@@ -401,7 +377,7 @@ app.MapDelete("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{sc
 
 #region Theater listings
 // Get Showtimes for a Theater
-app.MapGet("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{screenId}/showtimes", async
+app.MapGet("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{screenId}/showtimes", [OutputCache(PolicyName = Expire60Seconds)] async
        (IRepository theaterChainRepository, CancellationToken cancellationToken,
           int chainId, int theaterId) =>
 {

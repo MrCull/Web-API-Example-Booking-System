@@ -134,8 +134,9 @@ internal class TheaterTests
     public void UpdateScreen_InvalidId_SpecificExceptionRaisedAndNoUpdateOccurs()
     {
         // Act & Assert
-        TheaterException? exception = Assert.Throws<TheaterException>(() => _theater.UpdateScreen(Guid.NewGuid(), "Updated Screen Number"));
-        exception.Message.Should().Be("Screen does not exist");
+        Guid screenId = Guid.NewGuid();
+        TheaterException? exception = Assert.Throws<TheaterException>(() => _theater.UpdateScreen(screenId, "Updated Screen Number"));
+        exception.Message.Should().Be($"Screen with id[{screenId}] does not exist");
     }
 
     [Test]
@@ -194,7 +195,7 @@ internal class TheaterTests
     {
         // Act
         TheaterException? exception = Assert.Throws<TheaterException>(() => _theater.GetScreenByName("1"));
-        exception.Message.Should().Be("Screen does not exist");
+        exception.Message.Should().Be("Screen with name[1] does not exist");
     }
 
     [Test]
