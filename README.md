@@ -3,6 +3,8 @@
 I chanced upon a debate on Reddit concerning a take-home project that many deemed overly ambitious:
 - https://www.reddit.com/r/dotnet/comments/1841x0f/does_this_takehome_project_look_okay/
 
+![image](https://github.com/user-attachments/assets/5a33b9d5-42c6-4ef7-8ee4-2a83ee484737)
+
 Contrary to the crowd, it piqued my interest as a perfect little project to exhibit a fully working clean Web API project, built with a contemporary Tech Stack and Clean Architectural patterns.
 
 ## Tech Stack, Patterns & Dev practices
