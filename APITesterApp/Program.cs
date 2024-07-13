@@ -175,7 +175,7 @@ try
     Console.WriteLine($"Reservation made successfully with ID: {pendingReservation.Id}");
 
     // Confirm the reservation to complete the booking
-    HttpResponseMessage confirmBookingResponse = await client.PutAsJsonAsync($"/api/v1/theater-chains/{Odean.Id}/theaters/{theaterLoughborough.Id}/screens/{screen1.Id}/showtimes/{showtimeAddedDto}/reservations/{pendingReservation.Id}/confirm", pendingReservation);
+    HttpResponseMessage confirmBookingResponse = await client.PutAsJsonAsync($"/api/v1/theater-chains/{Odean.Id}/theaters/{theaterLoughborough.Id}/screens/{screen1.Id}/showtimes/{pendingReservation.ShowtimeId}/reservations/{pendingReservation.Id}/confirm", pendingReservation);
 
     if (!confirmBookingResponse.IsSuccessStatusCode)
     {

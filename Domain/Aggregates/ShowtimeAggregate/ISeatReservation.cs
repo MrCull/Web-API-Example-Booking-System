@@ -10,8 +10,7 @@ public interface ISeatReservation
     DateTime ReservationTimeUtc { get; }
     int ShowtimeId { get; }
     ReservationStatus Status { get; }
-
-    List<ISeat> GetSeats();
+    List<Seat> Seats { get; }
     void SetShowtime(IShowtime showtime);
     internal void SetReservationTimeout(DateTime reservationTimeoutUtc);
 }

@@ -89,16 +89,6 @@ internal class Showtime : IShowtime
     public List<ISeatReservation> GetSeatReservations()
         => SeatReservations.Select(sr => (ISeatReservation)sr).ToList();
 
-    public List<ISeatReservation> GetSeatReservationsBySeatNumbers(List<string> seatsRequired)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<ISeat> GetSeats()
-    {
-        throw new NotImplementedException();
-    }
-
     public ISeatReservation ProvisionallyReserveSeatsAndReturnReservation(List<string> seatNames)
     {
         List<string> alreadyReservedMatchingSeatNumbers = SeatReservations
@@ -114,7 +104,7 @@ internal class Showtime : IShowtime
         }
 
         List<Seat> seats = Screen!.GetSeatsByNames(seatNames);
-        SeatReservation seatReservation = new(DateTime.UtcNow, DateTime.UtcNow.AddMinutes(20), this, seats);
+        SeatReservation seatReservation = new(Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddMinutes(20), this, seats);
 
         SeatReservations.Add(seatReservation);
 

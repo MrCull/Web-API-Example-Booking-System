@@ -15,4 +15,5 @@ public interface ITheaterChainDtoMapperService
     ScreenWithIdDto MapScreenToScreenWithIdDto(IScreen screen);
     ShowtimeWithIdDto MapShowtimeToShowtimeWithIdDto(IShowtime showtime);
     SeatReservationWithIdDto MapSeatReservationToSeatReservationWithIdDto(ISeatReservation reservation);
+    BookingDto MapBookingToBookingDto(IBooking booking);
 }

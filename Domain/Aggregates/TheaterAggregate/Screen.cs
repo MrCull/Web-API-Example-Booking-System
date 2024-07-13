@@ -44,7 +44,8 @@ public class Screen(int theaterId, string screenNumber) : IScreen
     }
 
     internal List<Seat> GetSeatsByNames(List<string> seatNames)
-        => Seats.Where(s => seatNames.Contains(s.SeatNumber)).ToList();
+        => Seats.Where(s => seatNames.Contains(s.SeatNumber))
+            .ToList();
 
     internal bool HasFutureShowtimes()
         => Showtimes?.Any(s => s.ShowDateTimeUtc > DateTime.UtcNow) ?? false;

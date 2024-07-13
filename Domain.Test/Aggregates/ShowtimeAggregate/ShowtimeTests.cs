@@ -43,9 +43,9 @@ internal class ShowtimeTests
 
         seatReservations[0].Status.Should().Be(ReservationStatus.Reserved);
 
-        seatReservations[0].GetSeats().Count.Should().Be(3);
+        seatReservations[0].Seats.Count.Should().Be(3);
 
-        List<ISeat> seats = seatReservations[0].GetSeats();
+        List<Seat> seats = seatReservations[0].Seats;
 
         seats[0].SeatNumber.Should().Be("A1");
         seats[1].SeatNumber.Should().Be("A2");

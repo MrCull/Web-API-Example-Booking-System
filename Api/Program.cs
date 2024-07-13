@@ -440,12 +440,12 @@ app.MapPost("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{scre
 
     await theaterChainRepository.UpdateAsync(theaterChain, cancellationToken);
 
-    return Results.Created($"/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{screenId}/showtimes/{showtimeId}/reservations/{reservation.Id}", reservation);
+    return Results.Created($"/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{screenId}/showtimes/{showtimeId}/reservations/{reservation.Id}", reservationWithIdDto);
 });
 
 // Confirm a reservation
 app.MapPut("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{screenId}/showtimes/{showtimeId}/reservations/{reservationId}/confirm", async
-                                  (IRepository theaterChainRepository, CancellationToken cancellationToken,
+                                  (IRepository theaterChainRepository, CancellationToken cancellationToken, ITheaterChainDtoMapperService mapperService,
                                             int chainId, int theaterId, Guid screenId, int showtimeId, Guid reservationId) =>
 {
     TheaterChain? theaterChain = await theaterChainRepository.GetByIdAsync(chainId, cancellationToken);
@@ -461,7 +461,9 @@ app.MapPut("/api/v1/theater-chains/{chainId}/theaters/{theaterId}/screens/{scree
 
     await theaterChainRepository.UpdateAsync(theaterChain, cancellationToken);
 
-    return Results.Ok(booking);
+    BookingDto bookingDto = mapperService.MapBookingToBookingDto(booking);
+
+    return Results.Ok(bookingDto);
 });
 
 #endregion Reservation Management

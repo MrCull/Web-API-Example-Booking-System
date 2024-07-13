@@ -86,7 +86,7 @@ namespace Api.Services
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            return new(reservation.Id, reservation.GetSeats().Select(s => s.SeatNumber).ToList(), reservation.ShowtimeId, reservation.ReservationTimeoutUtc, reservationStatus);
+            return new(reservation.Id, reservation.Seats.Select(s => s.SeatNumber).ToList(), reservation.ShowtimeId, reservation.ReservationTimeoutUtc, reservationStatus);
         }
 
         public BookingDto MapBookingToBookingDto(IBooking booking)

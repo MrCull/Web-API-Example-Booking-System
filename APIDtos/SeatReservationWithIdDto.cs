@@ -2,11 +2,11 @@
 
 public record SeatReservationWithIdDto
 {
-    public Guid Id;
-    public List<string> Seats;
-    public int ShowtimeId;
-    public DateTime? ReservationTimeoutUtc;
-    public SeatReservationStatus Status;
+    public Guid Id { get; set; }
+    public List<string> Seats { get; set; }
+    public int ShowtimeId { get; set; }
+    public DateTime? ReservationTimeoutUtc { get; set; }
+    public SeatReservationStatus Status { get; set; }
 
     public SeatReservationWithIdDto(Guid id, List<string> seats, int showtimeId, DateTime? reservationTimeoutUtc, SeatReservationStatus status)
     {
