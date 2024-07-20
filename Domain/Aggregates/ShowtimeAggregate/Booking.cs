@@ -2,7 +2,7 @@
 
 namespace Domain.Aggregates.ShowtimeAggregate;
 
-internal record Booking : IBooking
+internal class Booking : IBooking
 {
     public Booking(Guid id, DateTime bookingTimeUtc, SeatReservation seatReservation)
     {

@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Domain.Aggregates.TheaterChainAggregate.TheaterChain">
+    <Position X="4.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMCCAEAAEAAgEAAAAAAAAYQAAQCQQAAAAAABAAAAAAA=</HashCode>
+      <FileName>Aggregates\TheaterChainAggregate\TheaterChain.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Movies" />
+      <Property Name="Theaters" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.TheaterChainAggregate.Movie">
+    <Position X="2.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACBAAAAAAgAUAAAAIAJAAAAAAAAAAAEAABAAAAAAA=</HashCode>
+      <FileName>Aggregates\TheaterChainAggregate\Movie.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.TheaterAggregate.Theater">
+    <Position X="7" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AKACgAABgQCgEQAAAAIAACQEQACACAgAEIAAAAAIBgA=</HashCode>
+      <FileName>Aggregates\TheaterAggregate\Thearter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="Screens" />
+      <Field Name="Showtimes" />
+      <Field Name="Movies" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.TheaterAggregate.Screen">
+    <Position X="9.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAADAAAAAAAAgMAQAAAAAAABABAAAAgAAAAAAA=</HashCode>
+      <FileName>Aggregates\TheaterAggregate\Screen.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Seats" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.TheaterAggregate.Seat">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TheaterAggregate\Seat.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.ShowtimeAggregate.Showtime">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAQBgEAQEBgAAABAEAQAAAABCEAAAIAQAAAE=</HashCode>
+      <FileName>Aggregates\ShowtimeAggregate\Showtime.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Movie" />
+      <Property Name="Screen" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="SeatReservations" />
+      <Property Name="Bookings" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.ShowtimeAggregate.SeatReservation">
+    <Position X="12.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACIAAEAQAUAAAAAgAgAgAAAAAAABAAAAAEEAAAAAA=</HashCode>
+      <FileName>Aggregates\ShowtimeAggregate\SeatReservation.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Seats" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Domain.Aggregates.ShowtimeAggregate.Booking">
+    <Position X="12.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAACAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\ShowtimeAggregate\Booking.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
