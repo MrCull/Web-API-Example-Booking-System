@@ -62,7 +62,7 @@ From here you eill be able to see and access the complete suite of API end point
 
 
 # Example requests & responses
-Example requests & responses can be seen by running the [APITesterApp](https://github.com/MrCull/Web-API-Example-Booking-System/tree/main/APITesterApp) project which performs these actions which covers setting up theater chains, managing movies, theaters, showtimes, and bookings.
+Example requests & responses can be seen by running the [APITesterApp](/APITesterApp) project which performs these actions which covers setting up theater chains, managing movies, theaters, showtimes, and bookings.
 
 ## 1. HTTP Client Configuration
 
