@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <None Remove="Components\Pages\Home.razor.css" />
+    <None Remove="Components\Pages\OutputAndCopyToClipboard.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Components\Pages\Home.razor.css" />
+    <Content Include="Components\Pages\OutputAndCopyToClipboard.razor.css" />
   </ItemGroup>
 
   <ItemGroup>

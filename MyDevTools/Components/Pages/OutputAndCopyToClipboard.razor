@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<div class="col-md-4 offset-md-4">
+    <label>Results</label>
+    <div class="container">
+        <textarea @bind="OutputText" rows="6"></textarea>
+
+    </div>
+
+    <div class="container">
+        <button class="btn btn-primary" @onclick="CopyToClipboard">Copy to Clipboard</button>
+        
+    </div>
+
+    <br />
+    <div class="container">
+        <label class="btn-success">@copyConfirmationMessage</label>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public string OutputText { get; set; } = "";
+
+    [Inject]
+    private Services.IClipboardService? ClipboardService { get; set; }
+    private string copyConfirmationMessage = "";
+
+    private async Task CopyToClipboard()
+    {
+        if (ClipboardService == null)
+        {
+            return;
+        }
+
+        try
+        {
+            await ClipboardService.CopyToClipboardAsync(OutputText);
+            copyConfirmationMessage = "Copied to clipboard!";
+            StateHasChanged();
+            await Task.Delay(3000);
+            copyConfirmationMessage = "";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            copyConfirmationMessage = "Error: " + ex.Message;
+        }
+    }
+}
