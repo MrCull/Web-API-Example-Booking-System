@@ -1,22 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Components
 
-<div class="col-md-4 offset-md-4">
-    <label>Results</label>
-    <div class="container">
-        <textarea @bind="OutputText" rows="6"></textarea>
-
+<div class="col-md-6 offset-md-3 mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Results</h5>
+        </div>
+        <div class="card-body">
+            <textarea class="form-control mb-3" @bind="OutputText" rows="6" placeholder="Your output will appear here..."></textarea>
+            <button class="btn btn-success w-100" @onclick="CopyToClipboard">Copy to Clipboard</button>
+            <div class="mt-3">
+                <span class="text-success">@copyConfirmationMessage</span>
+            </div>
+        </div>
     </div>
-
-    <div class="container">
-        <button class="btn btn-primary" @onclick="CopyToClipboard">Copy to Clipboard</button>
-        
-    </div>
-
-    <br />
-    <div class="container">
-        <label class="btn-success">@copyConfirmationMessage</label>
-    </div>
-
 </div>
 
 @code {
