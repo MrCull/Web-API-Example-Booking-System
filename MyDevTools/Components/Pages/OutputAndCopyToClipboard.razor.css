@@ -1,23 +1,21 @@
-﻿.textarea {
+﻿.monospace-font {
+    font-family: 'Consolas', 'Courier New', 'Lucida Console', 'Monaco', monospace;
+}
+
+.textarea {
     overflow: hidden;
     resize: none; /* Prevent manual resizing */
     min-height: 6em; /* Set a more appropriate minimum height */
     box-sizing: border-box; /* Include padding in the height calculation */
     padding: 10px; /* Add padding for better appearance */
     font-size: 1rem; /* Set a readable font size */
-    border: 1px solid #d1d1d1; /* Subtle border color */
+    border: 1px solid var(--border-color); /* Subtle border color */
     border-radius: 4px; /* Add border radius for smoother edges */
-}
-
-.text-success {
-    color: #6c757d; /* Subtle gray color */
-    font-weight: bold; /* Make the text bold for better visibility */
-    margin-top: 10px; /* Add margin to separate from other elements */
 }
 
 .button {
     padding: 10px 20px;
-    background-color: #6c757d; /* Subtle gray color */
+    background-color: var(--success-color); /* Green color for success */
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -27,12 +25,11 @@
 }
 
 .button:hover {
-    background-color: #5a6268; /* Slightly darker gray on hover */
+    background-color: var(--success-color-dark); /* Slightly darker green on hover */
 }
 
-.label {
-    margin-left: 10px;
-    color: #adb5bd; /* Subtle gray color */
-    font-size: 0.875rem; /* Set a smaller font size for labels */
-    font-weight: 500; /* Medium font weight for better readability */
+.text-success {
+    color: var(--success-color); /* Green color for success */
+    font-weight: bold; /* Make the text bold for better visibility */
+    margin-top: 10px; /* Add margin to separate from other elements */
 }

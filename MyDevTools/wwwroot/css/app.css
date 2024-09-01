@@ -1,3 +1,14 @@
+:root {
+    --primary-color: #007bff; /* Modern blue */
+    --primary-color-dark: #0056b3; /* Darker blue */
+    --success-color: #28a745; /* Green for success */
+    --success-color-dark: #218838; /* Darker green */
+    --text-color: #6c757d; /* Subtle gray */
+    --border-color: #ced4da; /* Light gray for borders */
+    --background-color: #f8f9fa; /* Light gray background */
+    --error-color: #dc3545; /* Red for errors */
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

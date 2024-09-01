@@ -29,14 +29,7 @@
 
     @if (!string.IsNullOrEmpty(hashResult))
     {
-        <div class="row mt-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="alert alert-success" role="alert">
-                    <strong>Hash Result:</strong>
-                    <pre>@hashResult</pre>
-                </div>
-            </div>
-        </div>
+        <OutputAndCopyToClipboard OutputText="@hashResult" />
     }
 </div>
 

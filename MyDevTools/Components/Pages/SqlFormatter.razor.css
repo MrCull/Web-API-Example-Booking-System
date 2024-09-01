@@ -3,4 +3,8 @@
     max-height: 200px; /* Max height before scroll */
     overflow-y: auto; /* Add scroll if text exceeds max-height */
     resize: none; /* Disable manual resize */
+    border: 1px solid var(--border-color); /* Subtle border color */
+    padding: 10px; /* Add padding for better appearance */
+    font-size: 1rem; /* Set a readable font size */
+    border-radius: 4px; /* Add border radius for smoother edges */
 }

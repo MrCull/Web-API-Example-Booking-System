@@ -21,14 +21,7 @@
 
     @if (!string.IsNullOrEmpty(decodedJson))
     {
-        <div class="row mt-4">
-            <div class="col-md-10 offset-md-1">
-                <div class="alert alert-success" role="alert">
-                    <strong>Decoded JWT:</strong>
-                    <textarea readonly class="form-control" rows="8">@decodedJson</textarea>
-                </div>
-            </div>
-        </div>
+        <OutputAndCopyToClipboard OutputText="@decodedJson" />
     }
 </div>
 

@@ -15,28 +15,18 @@
             </div>
 
             <button class="btn btn-primary btn-block" @onclick="FormatSQLQuery">Format SQL Query</button>
-            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
         </div>
     </div>
 
     @if (!string.IsNullOrEmpty(formattedQuery))
-    {
-        <div class="row mt-4">
-            <div class="col-md-10 offset-md-1">
-                <div class="alert alert-success" role="alert">
-                    <strong>Formatted SQL Query:</strong>
-                    <textarea readonly id="formattedQuery" class="form-control auto-expand" rows="15">@formattedQuery</textarea>
-                    <div class="mt-2 text-success">@copyConfirmationMessage</div>
-                </div>
-            </div>
-        </div>
+    { 
+        <OutputAndCopyToClipboard OutputText="@formattedQuery" />
     }
 </div>
 
 @code {
     private string inputQuery = "SELECT name, age, department FROM employees INNER JOIN departments ON employees.department_id = departments.id WHERE age > 21 AND (department = 'Engineering' OR department = 'HR') GROUP BY department ORDER BY age DESC;";
     private string formattedQuery = "";
-    private string copyConfirmationMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,19 +45,6 @@
         catch (Exception ex)
         {
             formattedQuery = "Error: " + ex.Message;
-        }
-    }
-
-    private async Task CopyToClipboard()
-    {
-        try
-        {
-            await ClipboardService.CopyToClipboardAsync(formattedQuery);
-            copyConfirmationMessage = "Query copied to clipboard!";
-        }
-        catch (Exception ex)
-        {
-            copyConfirmationMessage = "Error: " + ex.Message;
         }
     }
 }

@@ -29,14 +29,7 @@
 
     @if (guidResults != null && guidResults.Count > 0)
     {
-        <div class="row mt-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="alert alert-success" role="alert">
-                    <strong>GUID Results:</strong>
-                    <pre>@string.Join("\n", guidResults)</pre>
-                </div>
-            </div>
-        </div>
+        <OutputAndCopyToClipboard OutputText="@string.Join("\n", guidResults)" />
     }
 </div>
 
