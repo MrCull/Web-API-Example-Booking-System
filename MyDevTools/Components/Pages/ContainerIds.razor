@@ -20,7 +20,6 @@
 
             <div class="d-flex justify-content-between">
                 <button class="btn btn-primary btn-block" @onclick="GenerateCodes">Generate Ids</button>
-                <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy To Clipboard</button>
             </div>
         </div>
     </div>
@@ -100,19 +99,5 @@
             factor *= 2;
         }
         return sum % 11 % 10;
-    }
-
-
-    private async Task CopyToClipboard()
-    {
-        try
-        {
-            await ClipboardService.CopyToClipboardAsync(generatedCodes);
-            copyConfirmationMessage = "Text copied to clipboard!";
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
     }
 }

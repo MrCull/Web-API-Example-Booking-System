@@ -59,7 +59,6 @@
             </div>
 
             <button class="btn btn-primary btn-block" @onclick="GenerateCronExpression">Generate Cron Expression</button>
-            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
         </div>
     </div>
 
@@ -96,19 +95,6 @@
         catch (Exception ex)
         {
             cronExpression = "Error: " + ex.Message;
-        }
-    }
-
-    private async Task CopyToClipboard()
-    {
-        try
-        {
-            await ClipboardService.CopyToClipboardAsync(cronExpression);
-            copyConfirmationMessage = "Cron expression copied to clipboard!";
-        }
-        catch (Exception ex)
-        {
-            copyConfirmationMessage = "Error: " + ex.Message;
         }
     }
 }

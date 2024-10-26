@@ -15,7 +15,6 @@
             </div>
 
             <button class="btn btn-primary btn-block" @onclick="DecodeJwt">Decode JWT</button>
-            <button class="btn btn-success btn-block" @onclick="CopyToClipboard">Copy to Clipboard</button>
         </div>
     </div>
 
@@ -48,18 +47,6 @@
         catch (Exception ex)
         {
             decodedJson = "Error: " + ex.Message;
-        }
-    }
-
-    private async Task CopyToClipboard()
-    {
-        try
-        {
-            await ClipboardService.CopyToClipboardAsync(decodedJson);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
         }
     }
 }
