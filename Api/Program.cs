@@ -6,27 +6,19 @@ using Domain.Aggregates.TheaterAggregate;
 using Domain.Aggregates.TheaterChainAggregate;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.Azure.Cosmos;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.AddAzureCosmosClient("cosmos");
+builder.Services.AddCosmosRepository("TheaterChainDB", "TheaterChain");
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
-
-builder.Services.AddScoped<IRepository>(serviceProvider =>
-{
-    CosmosClient cosmosClient = serviceProvider.GetRequiredService<CosmosClient>();
-    return new Repository(cosmosClient, "TheaterChainDB", "TheaterChain");
-});
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 
 const string Expire60Seconds = "Expire60Seconds";
-
-builder.AddRedisOutputCache("cache");
 builder.Services.AddOutputCache(options =>
 {
     options.AddBasePolicy(builder =>
@@ -34,20 +26,8 @@ builder.Services.AddOutputCache(options =>
     options.AddPolicy(Expire60Seconds, builder =>
         builder.Expire(TimeSpan.FromSeconds(60)));
 });
+builder.AddRedisOutputCache("cache");
 
-
-builder.Services.AddProblemDetails();
-
-string? JwtKey = builder.Configuration["Jwt:Key"];
-string? JwtIssuer = builder.Configuration["Jwt:Issuer"];
-string? JwtAudience = builder.Configuration["Jwt:Audience"];
-
-if (string.IsNullOrEmpty(JwtKey) || string.IsNullOrEmpty(JwtIssuer) || string.IsNullOrEmpty(JwtAudience))
-{
-    throw new Exception("Jwt:Key, Jwt:Issuer, and Jwt:Audience must be set in appsettings.json");
-}
-
-// local services
 builder.Services.AddSingleton<ITheaterChainDtoMapperService, TheaterChainDtoMapperService>();
 
 
@@ -58,15 +38,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    //ServicePointManager.ServerCertificateValidationCallback +=
-    //(sender, cert, chain, sslPolicyErrors) => true;
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 app.UseOutputCache();
-
 app.UseHttpsRedirection();
 //app.UseAuthentication();
 //app.UseAuthorization();
