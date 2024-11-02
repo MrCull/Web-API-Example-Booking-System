@@ -68,8 +68,8 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseOutputCache();
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 
 # region Movie Management

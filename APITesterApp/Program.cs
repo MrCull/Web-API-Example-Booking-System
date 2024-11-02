@@ -206,6 +206,7 @@ catch (Exception ex)
 
 static string GenerateJwtToken()
 {
+    // This is just a local run test app, so ok to hardcode a dummy securityKey
     SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes("0F92A643-AD74-429C-8302-E52BC8D4BD6E"));
     SigningCredentials credentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 

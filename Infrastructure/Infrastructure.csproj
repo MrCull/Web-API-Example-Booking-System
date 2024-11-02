@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Microsoft.Azure.Cosmos" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.41.0" />
+    <PackageReference Include="Aspire.Microsoft.Azure.Cosmos" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.45.0" />
   </ItemGroup>
 
   <ItemGroup>
