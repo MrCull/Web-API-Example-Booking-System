@@ -1,14 +1,7 @@
-# Cinema Ticket Booking System Web API - An example Web API project
-
-I chanced upon a debate on Reddit concerning a take-home project that many deemed overly ambitious:
-- https://www.reddit.com/r/dotnet/comments/1841x0f/does_this_takehome_project_look_okay/
-
-![image](https://github.com/user-attachments/assets/5a33b9d5-42c6-4ef7-8ee4-2a83ee484737)
-
-Contrary to the crowd, it piqued my interest as a perfect little project to exhibit a fully working clean Web API project, built with a contemporary Tech Stack and Clean Architectural patterns.
+# Booking System Web API - An example Web API project
 
 ## Tech Stack, Patterns & Dev practices
-- **.Net 8**: Use the latest (at the time of creation) .Net framework.
+- **.Net 8**: Uses the latest (at the time of creation) .Net framework.
 - **C# 12**:
 - **Web API**: RESTful and using Minimal API for enhances performance.
 - **Clean Onion Architecture**
@@ -28,19 +21,22 @@ Wip/Future additions
 - **Cloud based hosting**: With load balancing and elastic scaling.
 - **Rate Limit**
 
+## Why?
+
+I chanced upon a debate on Reddit concerning a take-home project that many deemed overly ambitious:
+- https://www.reddit.com/r/dotnet/comments/1841x0f/does_this_takehome_project_look_okay/
+
+![image](https://github.com/user-attachments/assets/5a33b9d5-42c6-4ef7-8ee4-2a83ee484737)
+
+Contrary to the crowd, it piqued my interest as a perfect little project to exhibit a fully working clean Web API project, built with a contemporary Tech Stack and Clean Architectural patterns.
+
 ## Implementation
-This is the class structure designed to implement the solution
+This is the class structure designed to implement the solution for the challange
 ![image](https://github.com/user-attachments/assets/db26be4a-a4d5-4203-a6b8-efc17ae6bb76)
 
 ## APIs End points
 This is the list of APIs providing the solution
 ![image](https://github.com/user-attachments/assets/26efe814-f555-4999-b60e-41ac6b214c30)
-
-## Contributions?
-Engagement is  welcome. 
-If you have any feedback or wish to discuss any aspect of this project, please feel free to reach out.
-Feel free to submit Issues or Pull Requests with any suggestions.
-
 
 # Instructions to run the project
 
@@ -66,7 +62,7 @@ From here you eill be able to see and access the complete suite of API end point
 
 
 # Example requests & responses
-Example requests & responses can be seen by running the [APITesterApp](https://github.com/MrCull/Web-API-Example-Booking-System/tree/main/APITesterApp) project which performs these actions which covers setting up theater chains, managing movies, theaters, showtimes, and bookings.
+Example requests & responses can be seen by running the [APITesterApp](/APITesterApp) project which performs these actions which covers setting up theater chains, managing movies, theaters, showtimes, and bookings.
 
 ## 1. HTTP Client Configuration
 
@@ -107,4 +103,9 @@ Example requests & responses can be seen by running the [APITesterApp](https://g
 - **PUT Request**: Sends a PUT request to confirm the reservation and complete the booking process.
 
 
+
+# Contributions?
+Engagement is  welcome. 
+If you have any feedback or wish to discuss any aspect of this project, please feel free to reach out.
+Feel free to submit Issues or Pull Requests with any suggestions.
 
