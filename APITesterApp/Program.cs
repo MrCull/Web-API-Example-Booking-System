@@ -202,6 +202,9 @@ catch (Exception ex)
     Console.WriteLine($"An error occurred: {ex.Message}");
 }
 
+Console.WriteLine("\nExecution finished. Press any key to exit...");
+Console.ReadKey();
+
 
 
 static string GenerateJwtToken()

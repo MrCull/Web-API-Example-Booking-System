@@ -1,7 +1,6 @@
-﻿namespace Domain.Test.Aggregates
+﻿namespace Domain.Test.Aggregates;
+
+internal interface IAggregrateRoot
 {
-    internal interface IAggregrateRoot
-    {
-        Guid Id { get; }
-    }
+    Guid Id { get; }
 }

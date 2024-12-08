@@ -1,9 +1,8 @@
-﻿namespace Domain.Aggregates.ShowtimeAggregate
+﻿namespace Domain.Aggregates.ShowtimeAggregate;
+
+public interface IBooking
 {
-    public interface IBooking
-    {
-        DateTime BookingTimeUtc { get; }
-        Guid Id { get; }
-        ISeatReservation SeatReservation { get; }
-    }
+    DateTime BookingTimeUtc { get; }
+    Guid Id { get; }
+    ISeatReservation SeatReservation { get; }
 }
