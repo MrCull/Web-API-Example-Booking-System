@@ -1,7 +1,6 @@
-﻿namespace Domain.Aggregates
+﻿namespace Domain.Aggregates;
+
+public interface IAggregrateRoot
 {
-    public interface IAggregrateRoot
-    {
-        public int Id { get; }
-    }
+    public int Id { get; }
 }

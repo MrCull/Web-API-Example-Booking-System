@@ -1,9 +1,8 @@
 ﻿
-namespace Domain.Aggregates.TheaterAggregate
+namespace Domain.Aggregates.TheaterAggregate;
+
+public interface ISeat
 {
-    public interface ISeat
-    {
-        Guid Id { get; }
-        string SeatNumber { get; }
-    }
+    Guid Id { get; }
+    string SeatNumber { get; }
 }
