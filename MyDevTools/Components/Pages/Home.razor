@@ -1,41 +1,95 @@
 ﻿@page "/"
+@using MyDevTools.Services
+@inject SeoService SeoService
 
-<PageTitle>My Dev Tools</PageTitle>
+<PageTitle>My Dev Tools - Free Online Developer Tools</PageTitle>
+<HeadContent>
+    <meta name="description" content="Free online developer tools including JSON formatter, SQL formatter, GUID generator, hash generator, and more. All processing done locally in your browser - no data sent over the internet." />
+    <meta name="keywords" content="developer tools, JSON formatter, SQL formatter, GUID generator, hash generator, URL encoder, QR code generator, JWT decoder, developer utilities" />
+    <meta property="og:title" content="My Dev Tools - Free Online Developer Tools" />
+    <meta property="og:description" content="Free online developer tools including JSON formatter, SQL formatter, GUID generator, hash generator, and more. All processing done locally in your browser." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mydevtools.org" />
+    <link rel="canonical" href="https://mydevtools.org" />
+    <script type="application/ld+json">
+        @SeoService.GetStructuredData()
+    </script>
+</HeadContent>
 
 <!-- Hero Section -->
-<section class="hero-section bg-dark text-white text-center">
+<section class="hero-section bg-dark text-white text-center" aria-label="Introduction">
     <div class="container">
-        <img src="/main-logo-white-transparent.svg" alt="My Dev Tools logo" />
+        <img src="/main-logo-white-transparent.svg" alt="My Dev Tools - Free Online Developer Tools" width="200" height="200" />
+        <h1 class="display-4 mt-3">My Dev Tools</h1>
         <p class="lead">No user input data sent over the internet!</p> 
         <p class="lead">All processing is done locally in your browser.</p>
     </div>
 </section>
 
-<!-- About Section -->
-<section class="about-section bg-light text-center">
+<!-- Features Section -->
+<section class="features-section text-center" aria-label="Available Tools">
     <div class="container">
-        <h5>Is this site missing a useful feature?</h5> 
-        <h6>Log an Issue or submit a PR at: </h6><a href="https://github.com/MrCull/MyDevTools">github.com/MrCull/MyDevTools</a>
-    </div>
-</section>
-
-@* <!-- Features Section -->
-<section class="features-section text-center">
-    <div class="container">
-        <h2>Key Features</h2>
+        <h2>Developer Tools</h2>
         <div class="row">
             <div class="col-md-4">
                 <h3>JSON Formatter</h3>
-                <p>Clean and format your JSON.</p>
+                <p>Clean and format your JSON with syntax highlighting and validation.</p>
             </div>
             <div class="col-md-4">
-                <h3>Branch Names</h3>
-                <p>Auto-format your Git branch names.</p>
+                <h3>SQL Formatter</h3>
+                <p>Format and beautify your SQL queries for better readability.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>GUID Generator</h3>
+                <p>Generate unique GUIDs/UUIDs for your applications.</p>
             </div>
             <div class="col-md-4">
                 <h3>Hash Generator</h3>
-                <p>Generate secure hashes with ease.</p>
+                <p>Generate secure hashes using various algorithms.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>URL Encoder/Decoder</h3>
+                <p>Encode and decode URLs with proper character escaping.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>QR Code Generator</h3>
+                <p>Create QR codes for URLs, text, or contact information.</p>
             </div>
         </div>
     </div>
-</section> *@
+</section>
+
+<!-- About Section -->
+<section class="about-section bg-light text-center" aria-label="Contribution">
+    <div class="container">
+        <h2>Contribute to My Dev Tools</h2>
+        <p>Is this site missing a useful feature? Help us improve!</p>
+        <p>Log an Issue or submit a PR at: <a href="https://github.com/MrCull/MyDevTools" rel="noopener noreferrer">github.com/MrCull/MyDevTools</a></p>
+    </div>
+</section>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Add structured data for better SEO
+        var structuredData = new
+        {
+            context = "https://schema.org",
+            type = "WebApplication",
+            name = "My Dev Tools",
+            description = "Free online developer tools including JSON formatter, SQL formatter, GUID generator, hash generator, and more.",
+            url = "https://mydevtools.org",
+            applicationCategory = "DeveloperApplication",
+            operatingSystem = "Any",
+            offers = new
+            {
+                type = "Offer",
+                price = "0",
+                priceCurrency = "USD"
+            }
+        };
+
+        // You would need to implement a way to inject this into the page
+        // This could be done through a service or by adding it to the page's script section
+    }
+}
